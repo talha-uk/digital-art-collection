@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Art Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #0ff 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #ff0066 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, #0ff 0%, transparent 50%);
+            animation: bg-pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes bg-pulse {
+
+            0%,
+            100% {
+                opacity: 0.1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.2;
+                transform: scale(1.1);
+            }
+        }
+
+
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 120px 20px 60px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            background: linear-gradient(45deg, #0ff, #ff0066, #0ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes gradient-shift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #aaa;
+            letter-spacing: 0.05em;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        /* Image Counter */
+        .image-counter {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            padding: 0 20px;
+        }
+
+        .counter-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item:hover {
+            border-color: #0ff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Filter buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 2px solid #333;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #0ff, transparent);
+            transition: left 0.5s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: #0ff;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .filter-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Gallery grid - Masonry layout */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .gallery {
+            column-count: 4;
+            column-gap: 20px;
+            opacity: 0;
+            animation: gallery-fade-in 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes gallery-fade-in {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Image cards - Flexible height */
+        .image-card {
+            position: relative;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            perspective: 1000px;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .image-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            border-color: #0ff;
+            box-shadow:
+                0 15px 30px rgba(0, 0, 0, 0.5),
+                0 0 25px rgba(0, 255, 255, 0.2);
+        }
+
+        .image-card:hover::before {
+            opacity: 1;
+        }
+
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+
+        .image-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .image-info h3 {
+            color: #0ff;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px #0ff;
+        }
+
+        .image-info p {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Image Detail Modal */
+        .image-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: none;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .image-detail-modal.active {
+            display: block;
+        }
+
+        .detail-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Sol taraf - Ana resim */
+        .main-image-section {
+            flex: 1;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Orta kısım - Resim bilgileri */
+        .image-info-section {
+            width: 350px;
+            background: rgba(20, 20, 20, 0.95);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            border-left: 1px solid #333;
+            border-right: 1px solid #333;
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .image-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .image-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        .image-tags {
+            margin-bottom: 30px;
+        }
+
+        .tags-title {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 2px 4px 2px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .image-stats {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .image-stats .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .stat-label {
+            color: #888;
+        }
+
+        .stat-value {
+            color: #fff;
+        }
+
+        /* Sağ taraf - Küçük resim galerisi */
+        .thumbnail-section {
+            width: 120px;
+            background: rgba(15, 15, 15, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .thumbnail-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            opacity: 0.7;
+        }
+
+        .thumbnail:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .thumbnail.active {
+            border-color: #00ff88;
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Scroll bar styling */
+        .thumbnail-section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .thumbnail-section::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .thumbnail-section::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .thumbnail-section::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Navigation arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.prev {
+            left: 20px;
+        }
+
+        .nav-arrow.next {
+            right: 140px;
+            /* Sağdaki thumbnail section'ın genişliği kadar */
+        }
+
+        /* Detail Loading animation */
+        #detailLoading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        #detailLoading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Responsive for detail modal */
+        @media (max-width: 768px) {
+            .detail-container {
+                flex-direction: column;
+            }
+
+            .main-image-section {
+                height: 60vh;
+            }
+
+            .image-info-section {
+                width: 100%;
+                height: 30vh;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+            .thumbnail-section {
+                width: 100%;
+                height: 10vh;
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 10px;
+            }
+
+            .thumbnail-gallery {
+                flex-direction: row;
+                width: auto;
+            }
+
+            .thumbnail {
+                width: 60px;
+                height: 60px;
+                flex-shrink: 0;
+            }
+
+            .nav-arrow {
+                display: none;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #333;
+            border-top: 3px solid #0ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .counter-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 1rem 0.5rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .gallery {
+                column-count: 2;
+                column-gap: 15px;
+            }
+
+            .image-card {
+                margin-bottom: 15px;
+            }
+
+            .filter-buttons {
+                padding: 0 1rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .counter-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .gallery {
+                column-count: 1;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+
+        }
+
+        @media (min-width: 1200px) {
+            .gallery {
+                column-count: 5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-animation"></div>
+
+
+    <!-- Header -->
+    <header class="header">
+        <h1>Digital Art Collection</h1>
+        <p> Bu koleksiyon, uzun süredir topladığım görsellerden oluşuyor. <br>
+            Her biri bana farklı<strong> duygular, düşünceler, çelişkiler</strong> hissettiren anlar. <br>
+            Kimi zaman <strong>karanlık</strong>, kimi zaman <strong>arzulu</strong>, <strong>özgürlük</strong> hissi veya <strong>yanılsamalar</strong>... <br>
+            <strong>Burada hiçbir şey net değil</strong>, yorum tamamen sana — belki de böyle düşünmeni sağlayanlara ait. <br>
+            Belki bir maske, belki bir güç gösterisi, <strong>belki de sadece kendini farkedeceksin.</strong> <br>
+            <br>
+            Burası benim özgürce düşünebildiğim alan. <br>
+            Belki hatalıyım, belki kötüyüm ama burası bana ait.</p>
+    </header>
+
+    <!-- Image Counter Section -->
+    <div class="image-counter">
+        <div class="counter-stats">
+            <div class="stat-item">
+                <span class="stat-number" id="totalImages">0</span>
+                <span class="stat-label">Total Images</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="visibleImages">0</span>
+                <span class="stat-label">Visible</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="currentCategory">All</span>
+                <span class="stat-label">Category</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="pokemon">Pokémon</button>
+        <button class="filter-btn" data-filter="anime">Anime</button>
+        <button class="filter-btn" data-filter="girl">Girl</button>
+        <button class="filter-btn" data-filter="art">Art</button>
+        <button class="filter-btn" data-filter="photography">Photography</button>
+        <button class="filter-btn" data-filter="concept">Concept</button>
+        <button class="filter-btn" data-filter="cyberpunk">Cyberpunk</button>
+        <button class="filter-btn" data-filter="nature">Nature</button>
+    </div>
+
+    <!-- Gallery -->
+    <div class="gallery-container">
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="gallery" id="gallery">
+            <!-- Images will be loaded dynamically from img folder -->
+        </div>
+    </div>
+
+    <!-- Image Detail Modal -->
+    <div class="image-detail-modal" id="imageDetailModal">
+        <div class="detail-container">
+            <!-- Sol taraf - Ana resim -->
+            <div class="main-image-section">
+                <button class="close-btn" onclick="closeImageDetail()">&times;</button>
+                <img id="mainImage" class="main-image" src="" alt="">
+                <div class="loading" id="detailLoading">
+                    <div class="spinner"></div>
+                </div>
+
+                <!-- Navigation arrows -->
+                <button class="nav-arrow prev" onclick="previousImage()">‹</button>
+                <button class="nav-arrow next" onclick="nextImage()">›</button>
+            </div>
+
+            <!-- Orta kısım - Resim bilgileri -->
+            <div class="image-info-section">
+                <h1 id="imageTitle" class="image-title">Resim Yükleniyor...</h1>
+                <p id="imageDescription" class="image-description">Açıklama yükleniyor...</p>
+
+                <div class="image-tags">
+                    <div class="tags-title">Etiketler</div>
+                    <div id="imageTags"></div>
+                </div>
+
+                <div class="image-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Kategori</span>
+                        <span id="imageCategory" class="stat-value">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Resim</span>
+                        <span id="imageIndex" class="stat-value">1 / 1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Format</span>
+                        <span class="stat-value">JPG</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ taraf - Küçük resim galerisi -->
+            <div class="thumbnail-section">
+                <div id="thumbnailGallery" class="thumbnail-gallery">
+                    <!-- Thumbnails will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image configuration with custom names and descriptions
+        // You can edit the title, description, and category for each image
+        // 'yıldızlı gece eevee.jpg' this structure pulls the files in the img folder in the main directory
+        const imageConfig = {
+            // Art/Classical
+            'Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg': {
+                title: 'Saturn Devouring His Son',
+                description: 'Goya masterpiece',
+                category: 'art'
+            },
+            'shaun-tan-rules-of-summer-rabbit-painting.jpg': {
+                title: 'Rules of Summer',
+                description: 'Shaun Tan artistic work',
+                category: 'art'
+            },
+            'death.jpg': {
+                title: 'Death',
+                description: 'Dark artistic representation',
+                category: 'art'
+            },
+
+            // Nature/Animals
+            'marmots.jpg': {
+                title: 'Marmots',
+                description: 'Cute marmot photography',
+                category: 'nature'
+            },
+
+
+            // Default categorization for numbered images
+            '0415a816fa1dd8e3410d9eda4970a78d.jpg': {
+                title: 'Mystical Portrait',
+                description: 'A captivating portrait with ethereal qualities',
+                category: 'girl'
+            },
+            '0862ac2757217c85739a635fad068e8a.jpg': {
+                title: 'Abstract Vision',
+                description: 'Bold abstract composition with vibrant colors',
+                category: 'art'
+            },
+            '08a55b7616898903f11fb8c6222b12d5.jpg': {
+                title: 'Urban Dreams',
+                description: 'Contemporary urban landscape interpretation',
+                category: 'photography'
+            },
+            '0a0dba530678868c787fb83a33a91937.jpg': {
+                title: 'Digital Harmony',
+                description: 'Perfect balance of light and shadow',
+                category: 'art'
+            },
+            '0d3f420664864576bfe7d0a162314d8f.jpg': {
+                title: 'Conceptual Space',
+                description: 'Exploring the boundaries of imagination',
+                category: 'concept'
+            },
+            '115d02dd0149dfb207886b4949308af1.jpg': {
+                title: 'Creative Vision',
+                description: 'A unique artistic perspective',
+                category: 'art'
+            },
+            '1cf3d9fda930c651f1e7915b20bd2b4c.jpg': {
+                title: 'Modern Expression',
+                description: 'Contemporary digital artwork',
+                category: 'art'
+            },
+            '1e9674c5e59437589ee2110da989c33d.jpg': {
+                title: 'Artistic Journey',
+                description: 'Exploration through visual art',
+                category: 'photography'
+            },
+            '27942d022d1f37ee09acf9b4706db7e4.jpg': {
+                title: 'Digital Dreams',
+                description: 'Surreal digital composition',
+                category: 'concept'
+            },
+            '28072a9b-802a-4c2a-8df6-ea462317f6dd.jpg': {
+                title: 'Abstract Beauty',
+                description: 'Beautiful abstract interpretation',
+                category: 'art'
+            },
+            '28fe4467afcb476df379b907d4830ff3.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'photography'
+            },
+            '2bfa6153539f35ce5c564f0cbc4b5b9e.jpg': {
+                title: 'Color Symphony',
+                description: 'Harmonious color composition',
+                category: 'art'
+            },
+            '2eb6347e904b73644f2b5ffa2d4cce36.jpg': {
+                title: 'Depth and Light',
+                description: 'Playing with light and shadow',
+                category: 'photography'
+            },
+            '2eef6441fdeadd2fb27444970e74849b.jpg': {
+                title: 'Artistic Flow',
+                description: 'Flowing artistic elements',
+                category: 'art'
+            },
+            '342c8bfcfa9bbbc570fa11be76403345.jpg': {
+                title: 'Creative Energy',
+                description: 'Dynamic creative expression',
+                category: 'concept'
+            },
+            '3917d0464b4f6c93a584b34d45441fb0.jpg': {
+                title: 'Digital Essence',
+                description: 'Essential digital art form',
+                category: 'art'
+            },
+            '3db9d7ac9cc523b6c2e9632eaf514c6a.jpg': {
+                title: 'Visual Harmony',
+                description: 'Perfect visual balance',
+                category: 'photography'
+            },
+            '3dc3bde1593109938050bed9661852d8.jpg': {
+                title: 'Artistic Vision',
+                description: 'Unique artistic perspective',
+                category: 'art'
+            },
+            '3e17095b913bf3d9a5cb5f63cf54e4d1.jpg': {
+                title: 'Creative Depth',
+                description: 'Deep creative exploration',
+                category: 'concept'
+            },
+            '3eab0e630db72ce424ac83c49ec8efd4.jpg': {
+                title: 'Modern Art',
+                description: 'Contemporary artistic expression',
+                category: 'art'
+            },
+            '3f242682439a8d1e23f316d84d76efff.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'art'
+            },
+            '3f629c8d26e0dc7782b5230419150458.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'photography'
+            },
+            '3fe73a8b1f5a9f13e9488b32e52b0135.jpg': {
+                title: 'Creative Form',
+                description: 'Innovative artistic form',
+                category: 'concept'
+            },
+            '4084cf7359c5a30374870205f6a48bed.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'art'
+            },
+            '41c66d1226f94519c19d05efdbb92a82.jpg': {
+                title: 'Artistic Expression',
+                description: 'Pure artistic expression',
+                category: 'photography'
+            },
+            '447e9f72-2df2-48f0-9e62-7d20ef3e57b2.jpg': {
+                title: 'Digital Landscape',
+                description: 'Digital interpretation of landscape',
+                category: 'art'
+            },
+            '4f0f6c66a034ea40a310e271fc085a56.jpg': {
+                title: 'Creative Space',
+                description: 'Exploration of creative space',
+                category: 'concept'
+            },
+            '51f103a2ab60fbd6678c572d671a6179.jpg': {
+                title: 'Visual Rhythm',
+                description: 'Rhythmic visual composition',
+                category: 'art'
+            },
+            '52dbfce6-0a2a-4d55-9313-b7a4c0a22e33.jpg': {
+                title: 'Artistic Movement',
+                description: 'Dynamic artistic movement',
+                category: 'photography'
+            },
+            // Add custom titles and descriptions for your other images here
+            // Example format:
+            // 'filename.jpg': {
+            //     title: 'Your Custom Title',
+            //     description: 'Your custom description',
+            //     category: 'digital-art' // or 'photography', 'concept', '3d'
+            // },
+
+            '567e0fe48f5cc0443b96e981a2061e08.jpg': {
+                title: 'Digital Creation',
+                description: 'Beautiful digital artwork',
+                category: 'art'
+            },
+            '570c8c5675865e1daba3efb6721f2faa.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary artistic work',
+                category: 'concept'
+            },
+            '580881b1c155f3e85950988d0e2c8f70.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic expression',
+                category: 'photography'
+            },
+            '5c275d7d248df6f2107b8b674a56c338.jpg': {
+                title: 'Modern Beauty',
+                description: 'Contemporary beautiful art',
+                category: 'art'
+            },
+            '5d08e270843772ee3c044c0da1692b50.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual language',
+                category: 'photography'
+            },
+            '61d5ce4a89e792a0a99df7b577eda93f.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'concept'
+            },
+            '6a516f0beb1d818782b96e94b7a6ffaa.jpg': {
+                title: 'Digital Art',
+                description: 'Pure digital artistic form',
+                category: 'art'
+            },
+            '73140b7f-d9a7-41d7-bb61-f6d57093188d.jpg': {
+                title: 'Artistic Wonder',
+                description: 'Wonderful artistic creation',
+                category: '3d'
+            },
+            '757522ff9f7300dbcf779694c232dc88.jpg': {
+                title: 'Visual Depth',
+                description: 'Deep visual exploration',
+                category: 'photography'
+            },
+            '778ba294b9336ac915da739d645b8ef2.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative work',
+                category: 'digital-art'
+            },
+            '77b2d592-0d28-47f9-998f-c66b1ccae5cd.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful use of light',
+                category: 'photography'
+            },
+            '7d8d47078bf925d0cbf6c41194d5aa77.jpg': {
+                title: 'Digital Vision',
+                description: 'Visionary digital work',
+                category: 'concept'
+            },
+            '84afbd9e03c611a147805e0eec038509.jpg': {
+                title: 'Modern Expression',
+                description: 'Modern artistic expression',
+                category: 'digital-art'
+            },
+            '868ade1bc4d5f0b19e19fda4b98e108f.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative work',
+                category: 'photography'
+            },
+            '87a1a999666f67d3615466a131284740.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'digital-art'
+            },
+            '8b6d8f7b2ebfb94aea6ed09f180802b2.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'concept'
+            },
+            '8c296c0f40dcb0ed78d5b8eda98fe0ee.jpg': {
+                title: 'Digital Beauty',
+                description: 'Beautiful digital creation',
+                category: 'digital-art'
+            },
+            '8df9a835552dfb0c12642f4e0bd14d55.jpg': {
+                title: 'Creative Depth',
+                description: 'Deep creative exploration',
+                category: 'photography'
+            },
+            '8ee7cd9ed772989b6097abd6c3a1e3ce.jpg': {
+                title: 'Artistic Journey',
+                description: 'Journey through art',
+                category: 'digital-art'
+            },
+            '930cede5-39b6-45c0-8770-237e20fa3b8f.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: '3d'
+            },
+            '9649819036d23795453dcced1b669ec1.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'concept'
+            },
+            '96fb22dd5ec0059439deebaf04c6ab01.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'digital-art'
+            },
+            '985a7ca78d2096001d83a55c4fb4088e.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic work',
+                category: 'photography'
+            },
+            '99297edc753a157294a67a7fa890ddde.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'digital-art'
+            },
+            '9aa8923cea3a829531dbb9ce6548379a.jpg': {
+                title: 'Creative Form',
+                description: 'Innovative creative form',
+                category: 'concept'
+            },
+            '9b7d1aeeabbe5f77c76f3211418658e7.jpg': {
+                title: 'Digital Art',
+                description: 'Pure digital artistic expression',
+                category: 'digital-art'
+            },
+            '9c14a587366aaef2cf64db705c46c3f7.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'photography'
+            },
+            'Gm4yT25aQAAXJAp.jpg': {
+                title: 'Social Media Art',
+                description: 'Contemporary social media artwork',
+                category: 'digital-art'
+            },
+            'GmpYwimW0AAx8N0.jpg': {
+                title: 'Digital Culture',
+                description: 'Modern digital culture art',
+                category: 'digital-art'
+            },
+            'a10b41ef05d0884098e95496bf1fa841.jpg': {
+                title: 'Abstract Creation',
+                description: 'Beautiful abstract artwork',
+                category: 'digital-art'
+            },
+            'a3b8b834024cfc93ffd479cccacf49b2.jpg': {
+                title: 'Creative Expression',
+                description: 'Expressive creative work',
+                category: 'photography'
+            },
+            'b01716072618c5e471f4e8a1ecec679b.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'concept'
+            },
+            'b1865e94c226ca8874db9a0c9f32f302.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'digital-art'
+            },
+            'b597c56d595be8978190c0a57303b229.jpg': {
+                title: 'Artistic Vision',
+                description: 'Visionary artistic work',
+                category: 'photography'
+            },
+            'b659d988008a2f48cfb4a8e43dee8fc5.jpg': {
+                title: 'Creative Beauty',
+                description: 'Beautiful creative expression',
+                category: 'art'
+            },
+            'bd375e22-3a85-4c7b-9efd-c9e1be9da602.jpg': {
+                title: 'Modern Art',
+                description: 'Contemporary modern artwork',
+                category: 'art'
+            },
+            'bd6f5e0956a126735cc79d06d6427c52.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital composition',
+                category: 'concept'
+            },
+            'be6068b885d1456fd37ed9e088eaf34c.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic creation',
+                category: 'art'
+            },
+            'c02e11fff73159047536b26422766740.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual language',
+                category: 'photography'
+            },
+            'c66f9cc8-1c54-4993-bd3b-91339df5dcba.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'digital-art'
+            },
+            'ca35cea9-81cc-43bb-91d1-78e935f849a2.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful use of light',
+                category: 'concept'
+            },
+            'cbd88df1-1cc1-48e8-a810-ad4f7d83d8d1.jpg': {
+                title: 'Digital Expression',
+                description: 'Digital artistic expression',
+                category: '3d'
+            },
+            'ce421ae98b203ed0f5b3db01eac1127d.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'digital-art'
+            },
+            'cfb6552dcccf8cc6085466df2fa88421.jpg': {
+                title: 'Visual Depth',
+                description: 'Deep visual exploration',
+                category: 'photography'
+            },
+            'd527b4385122a3969877fff26c1d1f98.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'digital-art'
+            },
+            'd79e4efa02f9277b760f2ff98e2518b1.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative expression',
+                category: 'concept'
+            },
+            'd8d7b6d3a3002886b7da596d2ab92149.jpg': {
+                title: 'Digital Beauty',
+                description: 'Beautiful digital artwork',
+                category: 'digital-art'
+            },
+            'debf747bf4ea87801a45489ce1db4567.jpg': {
+                title: 'Artistic Journey',
+                description: 'Journey through artistic expression',
+                category: 'photography'
+            },
+            'e21dcd11ed36073690de237901ec13fc.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'digital-art'
+            },
+            'e25039de0f7ae4e5513697913a804e67.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative work',
+                category: 'concept'
+            },
+            'e4144c803b957078dc93fa647a091bae.jpg': {
+                title: 'Digital Vision',
+                description: 'Visionary digital creation',
+                category: 'digital-art'
+            },
+            'e50a121426ae8e164af7e07dfca04f91.jpg': {
+                title: 'Artistic Wonder',
+                description: 'Wonderful artistic work',
+                category: 'photography'
+            },
+            'e547021958f4b681007b2eeb79d35276.jpg': {
+                title: 'Creative Depth',
+                description: 'Deep creative exploration',
+                category: 'digital-art'
+            },
+            'e5caf6a5-69bd-4236-8ad8-1d753eb2a261.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: '3d'
+            },
+            'e5ed04b2a6d8178cdb7b9c96ed1a9cac.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'concept'
+            },
+            'e6e39b7adfa9740313c5ce1bfc215def.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'digital-art'
+            },
+            'e6ec5989107a915e4213c1ba37f8b198.jpg': {
+                title: 'Creative Soul',
+                description: 'Soulful creative expression',
+                category: 'photography'
+            },
+            'e75c0451c51e868c6da1501733f2d15b.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual language',
+                category: 'digital-art'
+            },
+            'ea60f8081e54b8122bbf44352e540975.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'concept'
+            },
+            'ecd1cedff9443d5e2ebcbbe15bbfd171.jpg': {
+                title: 'Digital Expression',
+                description: 'Digital artistic expression',
+                category: 'digital-art'
+            },
+            'f396a9f05056fc9cc05dec45d0d8d2cb.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'photography'
+            },
+            'f429bef3c2500719ca3dbbc278e51988.jpg': {
+                title: 'Visual Depth',
+                description: 'Deep visual exploration',
+                category: 'digital-art'
+            },
+            'f4a87a989bec4a021742fc9f094c7399.jpg': {
+                title: 'Artistic Beauty',
+                description: 'Beautiful artistic creation',
+                category: 'concept'
+            },
+            'f52997dbb5064e893facac558a7bbfea.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital artwork',
+                category: 'digital-art'
+            },
+            'f632fcbebd0f86e8d985c5bcfdc07b0f.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative expression',
+                category: 'photography'
+            },
+            'f6feabbb-0da0-4089-8e00-a3cafdef7463.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: '3d'
+            },
+            'f96b735c8e0e1c8dfd0729120fc9bca9.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful use of light',
+                category: 'digital-art'
+            },
+            'fa51e8b680da729af040e2533d5996d9.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative work',
+                category: 'concept'
+            },
+            'fbd4fe75ae67aecc61013eedfea20138.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital composition',
+                category: 'digital-art'
+            },
+            'untitled-25.jpg!PinterestSmall.jpg': {
+                title: 'Untitled Masterpiece',
+                description: 'Beautiful untitled artwork',
+                category: 'photography'
+            },
+
+            'Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg': {
+                title: 'Saturn Devouring His Son',
+                description: 'Francisco de Goya\'s masterpiece depicting the Roman myth',
+                category: 'digital-art'
+            },
+            'shaun-tan-rules-of-summer-rabbit-painting.jpg': {
+                title: 'Rules of Summer',
+                description: 'Shaun Tan\'s surreal rabbit painting',
+                category: 'digital-art'
+            },
+
+            // Additional missing images from img folder
+            '075f59223900f8bde2d5519c2c290ef4.jpg': {
+                title: 'Creative Expression',
+                description: 'Expressive creative work',
+                category: 'art'
+            },
+            '0fe8c25e3f8dac0753a44d65f613755c.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'photography'
+            },
+            '166e61c57ab5e428db18af27e9bf5313.jpg': {
+                title: 'Artistic Beauty',
+                description: 'Beautiful artistic creation',
+                category: 'art'
+            },
+            '1ae9ff091519c0ba9fb092c314795914.jpg': {
+                title: 'Modern Art',
+                description: 'Contemporary artistic piece',
+                category: 'art'
+            },
+            '1c4b485a3939495c18ec52c2c9326cc7.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital composition',
+                category: 'concept'
+            },
+            '292085acdb1fd7f0938fcaea2a754c8e.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic expression',
+                category: 'art'
+            },
+            '2981bf591af9c0fe8e0011001467b6a7.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'photography'
+            },
+            '2e122bc3bc0cea8cf90de6e1e696394f.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'digital-art'
+            },
+            '32a2ceeefc1f756c96357ca6ac4b1be7.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'concept'
+            },
+            '355158c4fbd86b2c6ee026a93364e321.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'photography'
+            },
+            '38a18a7e66925f8dc8cfc4a4ddc23d30.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'art'
+            },
+            '3a2d6a9c6d716372efb0ec6363635992.jpg': {
+                title: 'Modern Expression',
+                description: 'Contemporary artistic expression',
+                category: 'digital-art'
+            },
+            '3eab0e630db72ce424ac83c49ec8efd4.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative work',
+                category: 'concept'
+            },
+            '404.jpg': {
+                title: '404 Error',
+                description: 'Creative 404 error page design',
+                category: 'digital-art'
+            },
+            '4084cf7359c5a30374870205f6a48bed.jpg': {
+                title: 'Artistic Vision',
+                description: 'Unique artistic perspective',
+                category: 'photography'
+            },
+            '41a1df2477517e04f1a66674cf8ea1a6.jpg': {
+                title: 'Digital Beauty',
+                description: 'Beautiful digital artwork',
+                category: 'digital-art'
+            },
+            '41c66d1226f94519c19d05efdbb92a82.jpg': {
+                title: 'Creative Depth',
+                description: 'Deep creative exploration',
+                category: 'art'
+            },
+            '447e9f72-2df2-48f0-9e62-7d20ef3e57b2.jpg': {
+                title: 'Visual Narrative',
+                description: 'Narrative through visuals',
+                category: 'concept'
+            },
+            '46b850bc5a8dc4bfe6e185c147811a3e.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'art'
+            },
+            '485138f7ff9a1bc560e6a0c01ef8d693.jpg': {
+                title: 'Digital Expression',
+                description: 'Digital artistic expression',
+                category: 'digital-art'
+            },
+            '4a756761bf33c4e716dcf8cdf07fbf09.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative work',
+                category: 'photography'
+            },
+            '4aa825ca50bb120d43c4fb19e464334b.jpg': {
+                title: 'Visual Wonder',
+                description: 'Wonderful visual creation',
+                category: 'concept'
+            },
+            '4c156ed72c0153eb31d6e39538f9d33c.jpg': {
+                title: 'Artistic Journey',
+                description: 'Journey through art',
+                category: 'art'
+            },
+            '4e4841a463e43139b24abcbf355180c7.jpg': {
+                title: 'Digital Harmony',
+                description: 'Harmonious digital composition',
+                category: 'digital-art'
+            },
+            '4e90cec6872ebdfcb98eb1ce7d1f2a42.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'photography'
+            },
+            '4ea14beeffcaddaac9be75c99de47e02.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic creation',
+                category: 'art'
+            },
+            '4f0f6c66a034ea40a310e271fc085a56.jpg': {
+                title: 'Merhamet',
+                description: 'Resim bir savaş anına ait gibi gözüküyor ama rakip belli değil muhtemeln üstünlük figurun elinde.Muhtemeln rakibe uzatılan kılıç bir savaşa davet değil Devam etmemesi için bir ikaz buna merhamet diyebiliryiyiz belki farklı açılardan EGO olarak yorumlanabilirdi veya "kimle savaştığını bilmiyorsan rakip senin içindeki fikirlerdir" diye yorumlanabilir. Resimdeki renk paleti net ve keskin aynı şekilde tasarımda net çizgiler kullanılması sanat eserinde yorumlamaya açık bir kapı bırakıyor.',
+                category: 'concept',
+                tags: ['savaş', 'merhamet', 'ego', 'felsefi', 'konsept', 'derin']
+            },
+            '51f103a2ab60fbd6678c572d671a6179.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'digital-art'
+            },
+            '52dbfce6-0a2a-4d55-9313-b7a4c0a22e33.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative expression',
+                category: 'photography'
+            },
+            '56909dc072cf1b728e8e90747eac8c5d.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful use of light',
+                category: 'art'
+            },
+            '5796ae9afeab14faac6f3fb0225c759f.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'digital-art'
+            },
+            '57ae25ca7be9bed95f714723dfadd2a8.jpg': {
+                title: 'Modern Art',
+                description: 'Contemporary artistic work',
+                category: 'art'
+            },
+            '59a94fe6aefb37e38f9f3e60dba3bd55.jpg': {
+                title: 'Creative Expression',
+                description: 'Expressive creative artwork',
+                category: 'concept'
+            },
+            '5ce3f979cc6e66596fb138de397cd220.jpg': {
+                title: 'Digital Vision',
+                description: 'Visionary digital creation',
+                category: 'digital-art'
+            },
+            '5dee70c05052ff88c4603e73ade4a8c1.jpg': {
+                title: 'Artistic Beauty',
+                description: 'Beautiful artistic piece',
+                category: 'photography'
+            },
+            '5def4ec4bfdb03f5dd177b7e96bbbcd0.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual language',
+                category: 'art'
+            },
+            '61d5ce4a89e792a0a99df7b577eda93f.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative work',
+                category: 'concept'
+            },
+            '6539b41fa66bbb696a33d661ddbafccd.jpg': {
+                title: 'Digital Art',
+                description: 'Pure digital artistic expression',
+                category: 'digital-art'
+            },
+            '66e5928c44d0b56db69330137837b3f1.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'photography'
+            },
+            '6a516f0beb1d818782b96e94b7a6ffaa.jpg': {
+                title: 'Visual Wonder',
+                description: 'Wonderful visual creation',
+                category: 'art'
+            },
+            '6e861d170c7002efc8eab3328a9a124f.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative expression',
+                category: 'digital-art'
+            },
+            '6ee819290bd3c466f50f9952c8a0c636.jpg': {
+                title: 'Artistic Vision',
+                description: 'Unique artistic perspective',
+                category: 'concept'
+            },
+            '6f99c639f8dfbe9617af8ad3dded68be.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'photography'
+            },
+            '728bf2aa5b98034c178b33ddc66f5b61.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'digital-art'
+            },
+            '73140b7f-d9a7-41d7-bb61-f6d57093188d.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'art'
+            },
+            '744efd5fa2675cf0c0510dc167df5138.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic creation',
+                category: 'photography'
+            },
+            '757522ff9f7300dbcf779694c232dc88.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'concept'
+            },
+            '7626a15aa706ec4d4e35983a56a3215e.jpg': {
+                title: 'Digital Beauty',
+                description: 'Beautiful digital composition',
+                category: 'digital-art'
+            },
+            '778ba294b9336ac915da739d645b8ef2.jpg': {
+                title: 'Modern Expression',
+                description: 'Contemporary artistic expression',
+                category: 'art'
+            },
+            '7866deafbe8083205a48c63ca80b3086.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'photography'
+            },
+            '78861e029efee6350f80ee2f06d241df.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'digital-art'
+            },
+            '81eb56fb4c25e458295079a032b5df8f.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'concept'
+            },
+            '8487902aa77a89fef5ff6ca8e84ccb84.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative artwork',
+                category: 'art'
+            },
+            '848ab1205fb1ec20752ae651c205ceab.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'digital-art'
+            },
+            '859c21090abb663da93f9e7006f98191.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'photography'
+            },
+            '86c91b4c1ebebd774b5c46dc9aaabb0d.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'concept'
+            },
+            '8aa9d5f422b0e91aa0bd0a597d766301.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative expression',
+                category: 'digital-art'
+            },
+            '8bd55788dfbf32743679c1176ebec02a.jpg': {
+                title: 'Artistic Vision',
+                description: 'Unique artistic perspective',
+                category: 'art'
+            },
+            '8df9a835552dfb0c12642f4e0bd14d55.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'photography'
+            },
+            '8ee7cd9ed772989b6097abd6c3a1e3ce.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'concept'
+            },
+            '930cede5-39b6-45c0-8770-237e20fa3b8f.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'digital-art'
+            },
+            '9649819036d23795453dcced1b669ec1.jpg': {
+                title: 'Artistic Beauty',
+                description: 'Beautiful artistic creation',
+                category: 'art'
+            },
+            '96fb22dd5ec0059439deebaf04c6ab01.jpg': {
+                title: 'Modern Art',
+                description: 'Contemporary artistic work',
+                category: 'photography'
+            },
+            '985a7ca78d2096001d83a55c4fb4088e.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'concept'
+            },
+            '9bc5a89c0e6b60a2f12330cdf72c2d96.jpg': {
+                title: 'Digital Expression',
+                description: 'Digital artistic expression',
+                category: 'digital-art'
+            },
+            'Gm4yT25aQAAXJAp.jpg': {
+                title: 'Social Media Art',
+                description: 'Contemporary social media artwork',
+                category: 'digital-art'
+            },
+            'GmpYwimW0AAx8N0.jpg': {
+                title: 'Digital Culture',
+                description: 'Modern digital culture art',
+                category: 'digital-art'
+            },
+            'a139f5ed43932ce6a5bfe34aacc5350f.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic expression',
+                category: 'art'
+            },
+            'b3521983d0f5434f0fa735223cb0ba7a.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'photography'
+            },
+            'b73f80976d7ef2fd7187b8ff79a14b63.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative work',
+                category: 'concept'
+            },
+            'b899f6a85450b7119016ba318389bf44.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'digital-art'
+            },
+            'b9825ec02dc68ae4cfe9f6c429abf6af.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'art'
+            },
+            'ba855ac156df2c74d945f0a5083cd7f9.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'photography'
+            },
+            'bdfa3e8abba9262f875a0daed8b49995.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative expression',
+                category: 'concept'
+            },
+            'c020598e7c62a25b42a5b07c525b3b30.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'digital-art'
+            },
+            'c3798bbdeb830870c14fd89971432019.jpg': {
+                title: 'Artistic Vision',
+                description: 'Unique artistic perspective',
+                category: 'art'
+            },
+            'c4573f1dc1c635f1b8c5420a9eda635e.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'photography'
+            },
+            'c7b4dc230eb4080a8381a124151319a5.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'concept'
+            },
+            'c8333bb49d7d2ae08238622d9f37202a.jpg': {
+                title: 'Digital Beauty',
+                description: 'Beautiful digital composition',
+                category: 'digital-art'
+            },
+            'c92be0ace0e0ecff7579098a1a9497df.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'art'
+            },
+            'ce421ae98b203ed0f5b3db01eac1127d.jpg': {
+                title: 'Modern Expression',
+                description: 'Contemporary artistic expression',
+                category: 'photography'
+            },
+            'cebc17c547ea6974e0d16a729dc25bec.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'concept'
+            },
+            'cfb6552dcccf8cc6085466df2fa88421.jpg': {
+                title: 'Digital Art',
+                description: 'Pure digital artistic expression',
+                category: 'digital-art'
+            },
+            'd2d8295a572ec720fa5ac7beb671bc24.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic creation',
+                category: 'art'
+            },
+            'd321cc1f9f40a68629f161259253b18c.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'photography'
+            },
+            'd4738dfb6cdfc1e95479a483a13d52c6.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative work',
+                category: 'concept'
+            },
+            'd527b4385122a3969877fff26c1d1f98.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'digital-art'
+            },
+            'd582365c57a9e2c5c6a473bba0053968.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'art'
+            },
+            'd7350251fb0430b18c5e15620b0fb2e2.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'photography'
+            },
+            'd7614047bf65a4823b9197e8068b28fa.jpg': {
+                title: 'Creative Energy',
+                description: 'Energetic creative expression',
+                category: 'concept'
+            },
+            'd79e4efa02f9277b760f2ff98e2518b1.jpg': {
+                title: 'Digital Dreams',
+                description: 'Dreamy digital artwork',
+                category: 'digital-art'
+            },
+            'd8d7b6d3a3002886b7da596d2ab92149.jpg': {
+                title: 'Artistic Vision',
+                description: 'Unique artistic perspective',
+                category: 'art'
+            },
+            'daa6120e3489d17d3e3038093c8f3a30.jpg': {
+                title: 'Creative Flow',
+                description: 'Flowing creative energy',
+                category: 'photography'
+            },
+            'df53a2f180a174effabd7c21677fdfd6.jpg': {
+                title: 'Visual Story',
+                description: 'Storytelling through visuals',
+                category: 'concept'
+            },
+            'e87bafd5a6ee322c44645ae12dc7d9c0.jpg': {
+                title: 'Digital Beauty',
+                description: 'Beautiful digital composition',
+                category: 'digital-art'
+            },
+            'ebb0e797eba6ceb853968ae4018e6e4b.jpg': {
+                title: 'Artistic Form',
+                description: 'Beautiful artistic form',
+                category: 'art'
+            },
+            'f12d4afdd503ba034858ea66212b52af.jpg': {
+                title: 'Modern Art',
+                description: 'Contemporary artistic work',
+                category: 'photography'
+            },
+            'f3639961337df95ee67c015e50b44cb5.jpg': {
+                title: 'Creative Vision',
+                description: 'Visionary creative work',
+                category: 'concept'
+            },
+            'f4d67f97aec6fbf1eca7711db1fbae33.jpg': {
+                title: 'Digital Expression',
+                description: 'Digital artistic expression',
+                category: 'digital-art'
+            },
+            'f73c16abc95625fe44e7b14e80db1f7f.jpg': {
+                title: 'Artistic Soul',
+                description: 'Soulful artistic creation',
+                category: 'art'
+            },
+            'f96b735c8e0e1c8dfd0729120fc9bca9.jpg': {
+                title: 'Visual Harmony',
+                description: 'Harmonious visual composition',
+                category: 'photography'
+            },
+            'fa023e1c8ea10c378a347322e3dd6087.jpg': {
+                title: 'Creative Spirit',
+                description: 'Spirited creative work',
+                category: 'concept'
+            },
+            'fa51e8b680da729af040e2533d5996d9.jpg': {
+                title: 'Digital Wonder',
+                description: 'Wonderful digital creation',
+                category: 'digital-art'
+            },
+            'fb0585b60c603500ee06731c6ebca127.jpg': {
+                title: 'Artistic Light',
+                description: 'Beautiful interplay of light',
+                category: 'art'
+            },
+            'fbd4fe75ae67aecc61013eedfea20138.jpg': {
+                title: 'Visual Poetry',
+                description: 'Poetic visual expression',
+                category: 'photography'
+            },
+            'untitled-25.jpg!PinterestSmall.jpg': {
+                title: 'Pinterest Art',
+                description: 'Social media inspired artwork',
+                category: 'digital-art'
+            },
+        };
+
+        // All images from img folder (complete list)
+        const images = [
+            '2b8b21bdd9101f8a949cd5fa1c5392db.jpg',
+            '0300e2e51959747579faa78dd8363933.jpg',
+            '0415a816fa1dd8e3410d9eda4970a78d.jpg',
+            '075f59223900f8bde2d5519c2c290ef4.jpg',
+            '0862ac2757217c85739a635fad068e8a.jpg',
+            '0867496bd54b135b7c77fab4d2513d4a.jpg',
+            '08a55b7616898903f11fb8c6222b12d5.jpg',
+            '0a0dba530678868c787fb83a33a91937.jpg',
+            '0d3f420664864576bfe7d0a162314d8f.jpg',
+            '0e733729a1792f476b5edf1743742458.jpg',
+            '0f123aa77bb55b45b5aeb78dadac9965.jpg',
+            '0fe8c25e3f8dac0753a44d65f613755c.jpg',
+            '115d02dd0149dfb207886b4949308af1.jpg',
+            '166e61c57ab5e428db18af27e9bf5313.jpg',
+            '1ae9ff091519c0ba9fb092c314795914.jpg',
+            '1c4b485a3939495c18ec52c2c9326cc7.jpg',
+            '1cf3d9fda930c651f1e7915b20bd2b4c.jpg',
+            '1def6e67db9a7c479af94ce0c02a0ac9.jpg',
+            '1e9674c5e59437589ee2110da989c33d.jpg',
+            '27942d022d1f37ee09acf9b4706db7e4.jpg',
+            '28072a9b-802a-4c2a-8df6-ea462317f6dd.jpg',
+            '28fe4467afcb476df379b907d4830ff3.jpg',
+            '292085acdb1fd7f0938fcaea2a754c8e.jpg',
+            '2981bf591af9c0fe8e0011001467b6a7.jpg',
+            '2bfa6153539f35ce5c564f0cbc4b5b9e.jpg',
+            '2e122bc3bc0cea8cf90de6e1e696394f.jpg',
+            '2eb6347e904b73644f2b5ffa2d4cce36.jpg',
+            '2eef6441fdeadd2fb27444970e74849b.jpg',
+            '32a2ceeefc1f756c96357ca6ac4b1be7.jpg',
+            '342c8bfcfa9bbbc570fa11be76403345.jpg',
+            '3443d269ec43c2f4db7f3d9982082aef.jpg',
+            '355158c4fbd86b2c6ee026a93364e321.jpg',
+            '38a18a7e66925f8dc8cfc4a4ddc23d30.jpg',
+            '3917d0464b4f6c93a584b34d45441fb0.jpg',
+            '3a2d6a9c6d716372efb0ec6363635992.jpg',
+            '3bda7e8adadd625196755ef9c01dfab8.jpg',
+            '3db9d7ac9cc523b6c2e9632eaf514c6a.jpg',
+            '3dc3bde1593109938050bed9661852d8.jpg',
+            '3e17095b913bf3d9a5cb5f63cf54e4d1.jpg',
+            '3eab0e630db72ce424ac83c49ec8efd4.jpg',
+            '3f242682439a8d1e23f316d84d76efff.jpg',
+            '3f629c8d26e0dc7782b5230419150458.jpg',
+            '3fe73a8b1f5a9f13e9488b32e52b0135.jpg',
+            '404.jpg',
+            '4084cf7359c5a30374870205f6a48bed.jpg',
+            '41a1df2477517e04f1a66674cf8ea1a6.jpg',
+            '41c66d1226f94519c19d05efdbb92a82.jpg',
+            '447e9f72-2df2-48f0-9e62-7d20ef3e57b2.jpg',
+            '465678e0acf98c1eb914d31dd454e936.jpg',
+            '46b850bc5a8dc4bfe6e185c147811a3e.jpg',
+            '485138f7ff9a1bc560e6a0c01ef8d693.jpg',
+            '4a756761bf33c4e716dcf8cdf07fbf09.jpg',
+            '4aa825ca50bb120d43c4fb19e464334b.jpg',
+            '4c156ed72c0153eb31d6e39538f9d33c.jpg',
+            '4e4841a463e43139b24abcbf355180c7.jpg',
+            '4e90cec6872ebdfcb98eb1ce7d1f2a42.jpg',
+            '4ea14beeffcaddaac9be75c99de47e02.jpg',
+            '4ee6201b6676e99a858a78b3dede6d8c.jpg',
+            '4f0f6c66a034ea40a310e271fc085a56.jpg',
+            '51f103a2ab60fbd6678c572d671a6179.jpg',
+            '52dbfce6-0a2a-4d55-9313-b7a4c0a22e33.jpg',
+            '540b2c444ceb2f91601087d21d655986.jpg',
+            '567e0fe48f5cc0443b96e981a2061e08.jpg',
+            '56909dc072cf1b728e8e90747eac8c5d.jpg',
+            '570c8c5675865e1daba3efb6721f2faa.jpg',
+            '5796ae9afeab14faac6f3fb0225c759f.jpg',
+            '57ae25ca7be9bed95f714723dfadd2a8.jpg',
+            '580881b1c155f3e85950988d0e2c8f70.jpg',
+            '59a94fe6aefb37e38f9f3e60dba3bd55.jpg',
+            '5c275d7d248df6f2107b8b674a56c338.jpg',
+            '5ce3f979cc6e66596fb138de397cd220.jpg',
+            '5d08e270843772ee3c044c0da1692b50.jpg',
+            '5dee70c05052ff88c4603e73ade4a8c1.jpg',
+            '5def4ec4bfdb03f5dd177b7e96bbbcd0.jpg',
+            '61d5ce4a89e792a0a99df7b577eda93f.jpg',
+            '6539b41fa66bbb696a33d661ddbafccd.jpg',
+            '66e5928c44d0b56db69330137837b3f1.jpg',
+            '6a516f0beb1d818782b96e94b7a6ffaa.jpg',
+            '6d707cbf5cd57f764b5abf7af9dd09f8.jpg',
+            '6e861d170c7002efc8eab3328a9a124f.jpg',
+            '6ee819290bd3c466f50f9952c8a0c636.jpg',
+            '6f99c639f8dfbe9617af8ad3dded68be.jpg',
+            '728bf2aa5b98034c178b33ddc66f5b61.jpg',
+            '73140b7f-d9a7-41d7-bb61-f6d57093188d.jpg',
+            '744efd5fa2675cf0c0510dc167df5138.jpg',
+            '757522ff9f7300dbcf779694c232dc88.jpg',
+            '7626a15aa706ec4d4e35983a56a3215e.jpg',
+            '778ba294b9336ac915da739d645b8ef2.jpg',
+            '77b2d592-0d28-47f9-998f-c66b1ccae5cd.jpg',
+            '7866deafbe8083205a48c63ca80b3086.jpg',
+            '78861e029efee6350f80ee2f06d241df.jpg',
+            '7c50dabf8e536e28622a27edb0aa291e.jpg',
+            '7d8d47078bf925d0cbf6c41194d5aa77.jpg',
+            '81eb56fb4c25e458295079a032b5df8f.jpg',
+            '8487902aa77a89fef5ff6ca8e84ccb84.jpg',
+            '848ab1205fb1ec20752ae651c205ceab.jpg',
+            '84afbd9e03c611a147805e0eec038509.jpg',
+            '859c21090abb663da93f9e7006f98191.jpg',
+            '868ade1bc4d5f0b19e19fda4b98e108f.jpg',
+            '86c91b4c1ebebd774b5c46dc9aaabb0d.jpg',
+            '87a1a999666f67d3615466a131284740.jpg',
+            '8aa9d5f422b0e91aa0bd0a597d766301.jpg',
+            '8b6d8f7b2ebfb94aea6ed09f180802b2.jpg',
+            '8bd55788dfbf32743679c1176ebec02a.jpg',
+            '8c296c0f40dcb0ed78d5b8eda98fe0ee.jpg',
+            '8df9a835552dfb0c12642f4e0bd14d55.jpg',
+            '8ee7cd9ed772989b6097abd6c3a1e3ce.jpg',
+            '930cede5-39b6-45c0-8770-237e20fa3b8f.jpg',
+            '9649819036d23795453dcced1b669ec1.jpg',
+            '965c867be857a34297b06adf94451d84.jpg',
+            '96fb22dd5ec0059439deebaf04c6ab01.jpg',
+            '985a7ca78d2096001d83a55c4fb4088e.jpg',
+            '99297edc753a157294a67a7fa890ddde.jpg',
+            '9aa8923cea3a829531dbb9ce6548379a.jpg',
+            '9b7d1aeeabbe5f77c76f3211418658e7.jpg',
+            '9bc5a89c0e6b60a2f12330cdf72c2d96.jpg',
+            '9bf6348e136409a12f269e4004603cf8.jpg',
+            '9c14a587366aaef2cf64db705c46c3f7.jpg',
+            'a1031408b0e951b6e2755adde7e3b893.jpg',
+            'a10b41ef05d0884098e95496bf1fa841.jpg',
+            'a139f5ed43932ce6a5bfe34aacc5350f.jpg',
+            'a3b8b834024cfc93ffd479cccacf49b2.jpg',
+            'ad83930271534fcb65e0c70169072409.jpg',
+            'atsrcydubhnaj.jpg',
+            'b01716072618c5e471f4e8a1ecec679b.jpg',
+            'b108b5273156dee3bd3705f7599339cd.jpg',
+            'b1865e94c226ca8874db9a0c9f32f302.jpg',
+            'b3521983d0f5434f0fa735223cb0ba7a.jpg',
+            'b597c56d595be8978190c0a57303b229.jpg',
+            'b659d988008a2f48cfb4a8e43dee8fc5.jpg',
+            'b73f80976d7ef2fd7187b8ff79a14b63.jpg',
+            'b899f6a85450b7119016ba318389bf44.jpg',
+            'b8ff79a14b63b73f80976d7ef2fd7187.jpg',
+            'b9825ec02dc68ae4cfe9f6c429abf6af.jpg',
+            'ba855ac156df2c74d945f0a5083cd7f9.jpg',
+            'bc771e209e0acb15a1c59daf6b220c5b.jpg',
+            'bd375e22-3a85-4c7b-9efd-c9e1be9da602.jpg',
+            'bd6f5e0956a126735cc79d06d6427c52.jpg',
+            'bdfa3e8abba9262f875a0daed8b49995.jpg',
+            'be6068b885d1456fd37ed9e088eaf34c.jpg',
+            'blade runner.jpg',
+            'c020598e7c62a25b42a5b07c525b3b30.jpg',
+            'c02e11fff73159047536b26422766740.jpg',
+            'c3798bbdeb830870c14fd89971432019.jpg',
+            'c4573f1dc1c635f1b8c5420a9eda635e.jpg',
+            'c66f9cc8-1c54-4993-bd3b-91339df5dcba.jpg',
+            'c7b4dc230eb4080a8381a124151319a5.jpg',
+            'c8333bb49d7d2ae08238622d9f37202a.jpg',
+            'c92be0ace0e0ecff7579098a1a9497df.jpg',
+            'ca35cea9-81cc-43bb-91d1-78e935f849a2.jpg',
+            'cbd88df1-1cc1-48e8-a810-ad4f7d83d8d1.jpg',
+            'ce421ae98b203ed0f5b3db01eac1127d.jpg',
+            'cebc17c547ea6974e0d16a729dc25bec.jpg',
+            'cfb6552dcccf8cc6085466df2fa88421.jpg',
+            'd2d8295a572ec720fa5ac7beb671bc24.jpg',
+            'd321cc1f9f40a68629f161259253b18c.jpg',
+            'd4738dfb6cdfc1e95479a483a13d52c6.jpg',
+            'd527b4385122a3969877fff26c1d1f98.jpg',
+            'd582365c57a9e2c5c6a473bba0053968.jpg',
+            'd7350251fb0430b18c5e15620b0fb2e2.jpg',
+            'd7614047bf65a4823b9197e8068b28fa.jpg',
+            'd79e4efa02f9277b760f2ff98e2518b1.jpg',
+            'd8d7b6d3a3002886b7da596d2ab92149.jpg',
+            'daa6120e3489d17d3e3038093c8f3a30.jpg',
+            'dd8bb698e04a0430cd45fb45035d6063.jpg',
+            'death.jpg',
+            'debf747bf4ea87801a45489ce1db4567.jpg',
+            'df53a2f180a174effabd7c21677fdfd6.jpg',
+            'e21dcd11ed36073690de237901ec13fc.jpg',
+            'e25039de0f7ae4e5513697913a804e67.jpg',
+            'e4144c803b957078dc93fa647a091bae.jpg',
+            'e4grtn76756ge.jpg',
+            'e50a121426ae8e164af7e07dfca04f91.jpg',
+            'e547021958f4b681007b2eeb79d35276.jpg',
+            'e5caf6a5-69bd-4236-8ad8-1d753eb2a261.jpg',
+            'e5ed04b2a6d8178cdb7b9c96ed1a9cac.jpg',
+            'e5gefghejm.jpg',
+            'e6e39b7adfa9740313c5ce1bfc215def.jpg',
+            'e6ec5989107a915e4213c1ba37f8b198.jpg',
+            'e6ee4bf1e5917fe9a39dc7161c707652.jpg',
+            'e75c0451c51e868c6da1501733f2d15b.jpg',
+            'e876g7bfuw6efwdnmldın3r987v.jpg',
+            'e87bafd5a6ee322c44645ae12dc7d9c0.jpg',
+            'ea60f8081e54b8122bbf44352e540975.jpg',
+            'eb461a6bdae95ddc0672756ceb660b93.jpg',
+            'ebb0e797eba6ceb853968ae4018e6e4b.jpg',
+            'ecd1cedff9443d5e2ebcbbe15bbfd171.jpg',
+            'f12d4afdd503ba034858ea66212b52af.jpg',
+            'f3639961337df95ee67c015e50b44cb5.jpg',
+            'f396a9f05056fc9cc05dec45d0d8d2cb.jpg',
+            'f429bef3c2500719ca3dbbc278e51988.jpg',
+            'f4a87a989bec4a021742fc9f094c7399.jpg',
+            'f4d67f97aec6fbf1eca7711db1fbae33.jpg',
+            'f52997dbb5064e893facac558a7bbfea.jpg',
+            'f632fcbebd0f86e8d985c5bcfdc07b0f.jpg',
+            'f6feabbb-0da0-4089-8e00-a3cafdef7463.jpg',
+            'f705c134cbd7778b4f64c1c876c3d85a.jpg',
+            'f73c16abc95625fe44e7b14e80db1f7f.jpg',
+            'f809976d7ef2fd7187.jpg',
+            'f96b735c8e0e1c8dfd0729120fc9bca9.jpg',
+            'fa023e1c8ea10c378a347322e3dd6087.jpg',
+            'fa51e8b680da729af040e2533d5996d9.jpg',
+            'fb0585b60c603500ee06731c6ebca127.jpg',
+            'fbd4fe75ae67aecc61013eedfea20138.jpg',
+            'fc0478ccbe7e0f0d0b8fad9d1d4d4692.jpg',
+            'Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg',
+            'Gm4yT25aQAAXJAp.jpg',
+            'GmpYwimW0AAx8N0.jpg',
+            'johnnysilverhand.jpg',
+            'Leonardo.jpg',
+            'marmots.jpg',
+            's6sss6ffwybfuwbgyyfwf5h.jpg',
+            'shaun-tan-rules-of-summer-rabbit-painting.jpg',
+            'untitled-25.jpg!PinterestSmall.jpg',
+            'zimayyuvgsof578ry92nf24g.jpg',
+        ];
+        let currentFilter = 'all';
+
+        // Counter update function
+        function updateCounters() {
+            const totalImages = images.length;
+            const visibleImages = document.querySelectorAll('.image-card[style*="inline-block"], .image-card:not([style*="none"])').length;
+            const categoryName = currentFilter === 'all' ? 'All' : currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
+
+            document.getElementById('totalImages').textContent = totalImages;
+            document.getElementById('visibleImages').textContent = currentFilter === 'all' ? totalImages : visibleImages;
+            document.getElementById('currentCategory').textContent = categoryName;
+        }
+
+        // Function to get image information from configuration
+        function getImageInfo(filename) {
+            const config = imageConfig[filename];
+            if (config) {
+                return {
+                    title: config.title,
+                    description: config.description,
+                    category: config.category
+                };
+            }
+
+            // Fallback for unconfigured images
+            return {
+                title: 'Untitled Artwork',
+                description: 'Add custom description in imageConfig',
+                category: 'art'
+            };
+        }
+
+        // Function to create image card HTML
+        function createImageCard(filename, index) {
+            const imageInfo = getImageInfo(filename);
+            const imagePath = `img/${filename}`;
+
+            return `
+                <div class="image-card" data-category="${imageInfo.category}">
+                    <div class="image-wrapper">
+                        <img src="${imagePath}" alt="${imageInfo.title}" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="image-info">
+                                <h3>${imageInfo.title}</h3>
+                                <p>${imageInfo.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to load all images into the gallery
+        function loadGallery() {
+            const gallery = document.getElementById('gallery');
+            const loading = document.querySelector('.loading');
+
+            // Show loading animation
+            loading.style.display = 'flex';
+            gallery.style.display = 'none';
+
+            // Generate HTML for all images
+            const galleryHTML = images.map((filename, index) => {
+                return createImageCard(filename, index);
+            }).join('');
+
+            // Add images to gallery after a short delay to show loading
+            setTimeout(() => {
+                gallery.innerHTML = galleryHTML;
+                loading.style.display = 'none';
+                gallery.style.display = 'block'; // Changed from 'grid' to 'block' for masonry
+
+                // Re-initialize image click handlers for lightbox
+                initializeLightbox();
+
+                // Initialize counters
+                updateCounters();
+            }, 800);
+        }
+
+        // Function to initialize image click handlers for detail modal
+        function initializeLightbox() {
+            const imageCards = document.querySelectorAll('.image-card');
+
+            imageCards.forEach((card, index) => {
+                const imageWrapper = card.querySelector('.image-wrapper');
+                if (imageWrapper) {
+                    imageWrapper.addEventListener('click', () => {
+                        // Get image filename from src
+                        const img = card.querySelector('img');
+                        const imageSrc = img.src;
+                        const filename = imageSrc.split('/').pop();
+
+                        // Find image index in the images array
+                        const imageIndex = images.indexOf(filename);
+                        if (imageIndex !== -1) {
+                            openImageDetail(imageIndex);
+                        }
+                    });
+
+                    // Add cursor pointer to indicate clickable
+                    imageWrapper.style.cursor = 'pointer';
+                }
+            });
+        }
+
+
+        // Filter functionality with counter updates
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                currentFilter = button.getAttribute('data-filter');
+                const imageCards = document.querySelectorAll('.image-card');
+
+                imageCards.forEach(card => {
+                    if (currentFilter === 'all' || card.getAttribute('data-category') === currentFilter) {
+                        card.style.display = 'inline-block';
+                        card.style.animation = 'gallery-fade-in 0.5s ease-out forwards';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                updateCounters();
+            });
+        });
+
+        // Image Detail Modal functionality
+        let currentImageIndex = 0;
+        let filteredImages = [];
+
+        // Get image info with fallback and tags
+        function getImageInfoWithTags(filename) {
+            const config = imageConfig[filename];
+            if (config) {
+                return {
+                    title: config.title,
+                    description: config.description,
+                    category: config.category,
+                    tags: config.tags || [config.category, 'art', 'digital']
+                };
+            }
+
+            // Fallback for unconfigured images
+            return {
+                title: filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                description: 'Bu güzel sanat eseri koleksiyonumuzun bir parçasıdır. Detaylı açıklama yakında eklenecektir.',
+                category: 'art',
+                tags: ['sanat', 'koleksiyon', 'güzel', 'eser']
+            };
+        }
+
+        // Open image detail modal
+        function openImageDetail(imageIndex) {
+            // Get currently visible images based on filter
+            const visibleCards = document.querySelectorAll('.image-card[style*="inline-block"], .image-card:not([style*="none"])');
+            filteredImages = Array.from(visibleCards).map(card => {
+                const img = card.querySelector('img');
+                return img.src.split('/').pop();
+            });
+
+            // Find the index in filtered images
+            const filename = images[imageIndex];
+            currentImageIndex = filteredImages.indexOf(filename);
+            if (currentImageIndex === -1) {
+                currentImageIndex = 0;
+            }
+
+            const modal = document.getElementById('imageDetailModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            loadThumbnails();
+            displayCurrentImage();
+        }
+
+        // Close image detail modal
+        function closeImageDetail() {
+            const modal = document.getElementById('imageDetailModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Load thumbnails
+        function loadThumbnails() {
+            const gallery = document.getElementById('thumbnailGallery');
+            gallery.innerHTML = '';
+
+            filteredImages.forEach((filename, index) => {
+                const img = document.createElement('img');
+                img.src = `img/${filename}`;
+                img.className = 'thumbnail';
+                img.onclick = () => selectImage(index);
+
+                if (index === currentImageIndex) {
+                    img.classList.add('active');
+                }
+
+                gallery.appendChild(img);
+            });
+
+            // Scroll to current image
+            scrollToCurrentThumbnail();
+        }
+
+        // Select image
+        function selectImage(index) {
+            currentImageIndex = index;
+            displayCurrentImage();
+            updateThumbnailSelection();
+            scrollToCurrentThumbnail();
+        }
+
+        // Display current image
+        function displayCurrentImage() {
+            const filename = filteredImages[currentImageIndex];
+            const config = getImageInfoWithTags(filename);
+            const loading = document.getElementById('detailLoading');
+            const mainImage = document.getElementById('mainImage');
+
+            // Show loading
+            loading.style.display = 'block';
+            mainImage.style.opacity = '0';
+
+            // Update image
+            mainImage.src = `img/${filename}`;
+            mainImage.alt = config.title;
+
+            // Update info
+            document.getElementById('imageTitle').textContent = config.title;
+            document.getElementById('imageDescription').textContent = config.description;
+            document.getElementById('imageCategory').textContent = config.category.charAt(0).toUpperCase() + config.category.slice(1);
+            document.getElementById('imageIndex').textContent = `${currentImageIndex + 1} / ${filteredImages.length}`;
+
+            // Update tags
+            const tagsContainer = document.getElementById('imageTags');
+            tagsContainer.innerHTML = '';
+            if (config.tags) {
+                config.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'tag';
+                    tagElement.textContent = tag;
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+
+            // Hide loading when image loads
+            mainImage.onload = () => {
+                loading.style.display = 'none';
+                mainImage.style.opacity = '1';
+            };
+        }
+
+        // Update thumbnail selection
+        function updateThumbnailSelection() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                thumb.classList.toggle('active', index === currentImageIndex);
+            });
+        }
+
+        // Scroll to current thumbnail
+        function scrollToCurrentThumbnail() {
+            const thumbnailSection = document.querySelector('.thumbnail-section');
+            const activeThumbnail = document.querySelector('.thumbnail.active');
+
+            if (activeThumbnail) {
+                const sectionHeight = thumbnailSection.clientHeight;
+                const thumbnailTop = activeThumbnail.offsetTop;
+                const thumbnailHeight = activeThumbnail.clientHeight;
+
+                const scrollTop = thumbnailTop - (sectionHeight / 2) + (thumbnailHeight / 2);
+                thumbnailSection.scrollTo({
+                    top: scrollTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Navigation functions
+        function previousImage() {
+            if (currentImageIndex > 0) {
+                selectImage(currentImageIndex - 1);
+            } else {
+                selectImage(filteredImages.length - 1); // Loop to last image
+            }
+        }
+
+        function nextImage() {
+            if (currentImageIndex < filteredImages.length - 1) {
+                selectImage(currentImageIndex + 1);
+            } else {
+                selectImage(0); // Loop to first image
+            }
+        }
+
+        // Keyboard navigation for detail modal
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('imageDetailModal');
+            if (modal.classList.contains('active')) {
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        previousImage();
+                        break;
+                    case 'ArrowRight':
+                        nextImage();
+                        break;
+                    case 'Escape':
+                        closeImageDetail();
+                        break;
+                }
+            }
+        });
+
+        // Mouse wheel navigation on main image
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainImageSection = document.querySelector('.main-image-section');
+            if (mainImageSection) {
+                mainImageSection.addEventListener('wheel', (e) => {
+                    const modal = document.getElementById('imageDetailModal');
+                    if (modal.classList.contains('active')) {
+                        e.preventDefault();
+                        if (e.deltaY > 0) {
+                            nextImage();
+                        } else {
+                            previousImage();
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+        // Add parallax effect to background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const bgAnimation = document.querySelector('.bg-animation');
+            bgAnimation.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+
+        // Load gallery when page loads
+        window.addEventListener('load', () => {
+            loadGallery();
+        });
+
+        // Also load gallery when DOM is ready (fallback)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('gallery').children.length === 0) {
+                loadGallery();
+            }
+        });
+    </script>
+</body>
+
+</html>
