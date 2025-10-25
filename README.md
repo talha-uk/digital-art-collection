@@ -69,8 +69,8 @@ digital-art-collection/
 │   ├── resim1.jpg
 │   ├── resim2.png
 │   └── ...
-├── 📄 README.md           # Bu dosya
-└── 📄 .gitignore          # Git ignore dosyası
+└── 📄 README.md           # Bu dosya
+
 ```
 
 ## ⚙️ Konfigürasyon
@@ -170,7 +170,9 @@ CSS değişkenlerini düzenleyerek renk temasını özelleştirebilirsiniz:
 
 ## 📝 Lisans
 
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+Bu proje MIT lisansı altında lisanslanmıştır. 
+Kodu veya tasarımı özgürce kullanabilir, düzenleyebilir ve paylaşabilirsiniz.
+Ancak lütfen orijinal projeye atıfta bulunun. 🙏
 
 ## 🙏 Teşekkürler
 
@@ -180,9 +182,9 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 📞 İletişim
 
-- **GitHub**: [@kullaniciadi](https://github.com/kullaniciadi)
-- **Email**: email@example.com
-- **Website**: [website.com](https://website.com)
+- **GitHub**: [@talha-uk](https://github.com/talha-uk)
+- **Email**: talhaubeyd51@gmail.com
+- **Website**: [Live Website](https://willyoudancewithme.xyz/collection.html)
 
 ---
 
