@@ -199,6 +199,11 @@ Ancak lütfen orijinal projeye atıfta bulunun. 🙏
 - 🔍 Gelişmiş filtreleme sistemi
 - ⚡ Performans optimizasyonları
 
+## 🔄 Planlanan Güncellemeler
+
+### v1.1.0 (2025)
+- 🎨 Kullanıcıların resim yükleme sistemi 
+- 📱 Kullanıcı tabanlı Yorum ve Değerlendirme özelliği
 ---
 
 <div align="center">
