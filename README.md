@@ -1,4 +1,4 @@
-# 🎨 Digital Art Collection
+# 🎨 [Digital Art Collection](https://talha-uk.github.io/digital-art-collection/collection.html)
 
 Modern ve interaktif bir dijital sanat galerisi. Midjourney tarzı detay görünümü ile sanat eserlerinizi profesyonel bir şekilde sergileyin.
 
@@ -184,7 +184,7 @@ Ancak lütfen orijinal projeye atıfta bulunun. 🙏
 
 - **GitHub**: [@talha-uk](https://github.com/talha-uk)
 - **Email**: talhaubeyd51@gmail.com
-- **Website**: [Live Website](https://willyoudancewithme.xyz/collection.html)
+- **Website**: [Canlı Site](https://talha-uk.github.io/digital-art-collection/collection.html)
 
 ---
 
