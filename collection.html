@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Art Collection</title>
+    <title>Halloween Art Collection</title>
     <style>
         * {
             margin: 0;
@@ -14,8 +14,8 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a14 25%, #2d1810 50%, #1a0a14 75%, #0a0a0a 100%);
+            color: #ff9933;
             overflow-x: hidden;
             min-height: 100vh;
         }
@@ -39,9 +39,10 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 20%, #0ff 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, #ff0066 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, #0ff 0%, transparent 50%);
+                radial-gradient(circle at 20% 20%, #ff6600 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #6a0dad 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, #8b0000 0%, transparent 50%),
+                radial-gradient(circle at 60% 40%, #ff9933 0%, transparent 50%);
             animation: bg-pulse 8s ease-in-out infinite;
         }
 
@@ -70,7 +71,7 @@
 
         .header h1 {
             font-size: clamp(2.5rem, 6vw, 4rem);
-            background: linear-gradient(45deg, #0ff, #ff0066, #0ff);
+            background: linear-gradient(45deg, #ff6600, #9d4edd, #ff9933, #6a0dad, #ff6600);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -78,6 +79,7 @@
             animation: gradient-shift 3s ease-in-out infinite;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
+            filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.5)) drop-shadow(0 0 30px rgba(157, 78, 221, 0.3));
         }
 
         @keyframes gradient-shift {
@@ -94,7 +96,7 @@
 
         .header p {
             font-size: 1.2rem;
-            color: #aaa;
+            color: #cc8855;
             letter-spacing: 0.05em;
             max-width: 1500px;
             margin: 0 auto;
@@ -117,8 +119,8 @@
         }
 
         .stat-item {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #333;
+            background: linear-gradient(135deg, rgba(45, 24, 16, 0.6), rgba(26, 10, 30, 0.6));
+            border: 2px solid #663300;
             border-radius: 10px;
             padding: 1.5rem 1rem;
             text-align: center;
@@ -127,8 +129,8 @@
         }
 
         .stat-item:hover {
-            border-color: #0ff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            border-color: #9d4edd;
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.4), 0 0 15px rgba(157, 78, 221, 0.3);
             transform: translateY(-2px);
         }
 
@@ -136,15 +138,18 @@
             display: block;
             font-size: 2rem;
             font-weight: bold;
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff;
+            background: linear-gradient(45deg, #ff9933, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.5));
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
             display: block;
             font-size: 0.9rem;
-            color: #aaa;
+            color: #cc8855;
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
@@ -159,9 +164,9 @@
         }
 
         .filter-btn {
-            background: transparent;
-            border: 2px solid #333;
-            color: #fff;
+            background: linear-gradient(135deg, rgba(45, 24, 16, 0.3), rgba(26, 10, 30, 0.3));
+            border: 2px solid #663300;
+            color: #ff9933;
             padding: 0.8rem 1.5rem;
             cursor: pointer;
             font-family: 'Courier New', monospace;
@@ -179,16 +184,16 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, #0ff, transparent);
+            background: linear-gradient(90deg, transparent, #ff6600, #9d4edd, transparent);
             transition: left 0.5s ease;
         }
 
         .filter-btn:hover,
         .filter-btn.active {
-            border-color: #0ff;
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            border-color: #9d4edd;
+            color: #ff6600;
+            text-shadow: 0 0 10px #ff6600, 0 0 15px rgba(157, 78, 221, 0.5);
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.4), 0 0 15px rgba(157, 78, 221, 0.3);
         }
 
         .filter-btn:hover::before {
@@ -218,10 +223,10 @@
         /* Image cards - Flexible height */
         .image-card {
             position: relative;
-            background: rgba(20, 20, 20, 0.8);
+            background: linear-gradient(135deg, rgba(45, 24, 16, 0.8), rgba(26, 10, 20, 0.8));
             border-radius: 15px;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 1px solid #663300;
             transition: all 0.3s ease;
             perspective: 1000px;
             margin-bottom: 20px;
@@ -237,7 +242,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255, 102, 0, 0.1), rgba(157, 78, 221, 0.1), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
             z-index: 1;
@@ -245,10 +250,11 @@
 
         .image-card:hover {
             transform: translateY(-5px);
-            border-color: #0ff;
+            border-color: #ff6600;
             box-shadow:
                 0 15px 30px rgba(0, 0, 0, 0.5),
-                0 0 25px rgba(0, 255, 255, 0.2);
+                0 0 25px rgba(255, 102, 0, 0.3),
+                0 0 15px rgba(157, 78, 221, 0.2);
         }
 
         .image-card:hover::before {
@@ -292,14 +298,17 @@
         }
 
         .image-info h3 {
-            color: #0ff;
+            background: linear-gradient(45deg, #ff9933, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px #0ff;
+            filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.5));
         }
 
         .image-info p {
-            color: #ccc;
+            color: #cc8855;
             font-size: 0.9rem;
             line-height: 1.4;
         }
@@ -354,13 +363,13 @@
         /* Orta kısım - Resim bilgileri */
         .image-info-section {
             width: 350px;
-            background: rgba(20, 20, 20, 0.95);
+            background: linear-gradient(180deg, rgba(45, 24, 16, 0.95), rgba(26, 10, 30, 0.95));
             padding: 40px 30px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            border-left: 1px solid #333;
-            border-right: 1px solid #333;
+            border-left: 1px solid #663300;
+            border-right: 1px solid #663300;
             backdrop-filter: blur(10px);
             overflow-y: auto;
         }
@@ -393,14 +402,17 @@
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #fff;
+            background: linear-gradient(90deg, #ff9933, #9d4edd, #ff9933);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             line-height: 1.3;
         }
 
         .image-description {
             font-size: 14px;
             line-height: 1.6;
-            color: #ccc;
+            color: #cc8855;
             margin-bottom: 30px;
             text-align: justify;
         }
@@ -411,7 +423,7 @@
 
         .tags-title {
             font-size: 12px;
-            color: #888;
+            color: #996633;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
@@ -419,25 +431,27 @@
 
         .tag {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: linear-gradient(135deg, rgba(255, 102, 0, 0.2), rgba(157, 78, 221, 0.2));
+            color: #ff9933;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             margin: 2px 4px 2px 0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(157, 78, 221, 0.4);
             transition: all 0.3s ease;
         }
 
         .tag:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 102, 0, 0.3), rgba(157, 78, 221, 0.3));
+            border-color: #9d4edd;
             transform: translateY(-1px);
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
         }
 
         .image-stats {
             margin-top: auto;
             padding-top: 20px;
-            border-top: 1px solid #333;
+            border-top: 1px solid #663300;
         }
 
         .image-stats .stat-item {
@@ -451,17 +465,20 @@
         }
 
         .stat-label {
-            color: #888;
+            color: #996633;
         }
 
         .stat-value {
-            color: #fff;
+            background: linear-gradient(45deg, #ff9933, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Sağ taraf - Küçük resim galerisi */
         .thumbnail-section {
             width: 120px;
-            background: rgba(15, 15, 15, 0.95);
+            background: linear-gradient(180deg, rgba(30, 15, 10, 0.95), rgba(20, 10, 25, 0.95));
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -496,9 +513,9 @@
         }
 
         .thumbnail.active {
-            border-color: #00ff88;
+            border-color: #9d4edd;
             opacity: 1;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.6), 0 0 10px rgba(255, 102, 0, 0.3);
         }
 
         /* Scroll bar styling */
@@ -624,8 +641,9 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 3px solid #333;
-            border-top: 3px solid #0ff;
+            border: 3px solid #663300;
+            border-top: 3px solid #ff6600;
+            border-right: 3px solid #9d4edd;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -710,15 +728,16 @@
 
     <!-- Header -->
     <header class="header">
-        <h1>Digital Art Collection</h1>
-        <p> Bu koleksiyon, uzun süredir topladığım görsellerden oluşuyor. <br>
-            Her biri bana farklı<strong> duygular, düşünceler, çelişkiler</strong> hissettiren anlar. <br>
-            Kimi zaman <strong>karanlık</strong>, kimi zaman <strong>arzulu</strong>, <strong>özgürlük</strong> hissi veya <strong>yanılsamalar</strong>... <br>
-            <strong>Burada hiçbir şey net değil</strong>, yorum tamamen sana — belki de böyle düşünmeni sağlayanlara ait. <br>
-            Belki bir maske, belki bir güç gösterisi, <strong>belki de sadece kendini farkedeceksin.</strong> <br>
+        <h1>Halloween Collection 🕯️</h1>
+         <p>
+            Bu koleksiyon, karanlığın içindeki güzelliği arayan parçaları barındırıyor. <br>
+            Her görsel bir <strong>maske</strong>, bir <strong>yansıma</strong>, ya da belki <strong>bir çığlık</strong>. <br>
+            Kimi <strong>arzu</strong> dolu, kimi <strong>soğuk</strong> ve <strong>sessiz</strong>. <br>
+            <strong>Gerçek</strong> ile <strong>hayal</strong> arasındaki bu ince çizgide, seni de kendi gölgelerinle tanıştıracak. <br>
             <br>
-            Burası benim özgürce düşünebildiğim alan. <br>
-            Belki hatalıyım, belki kötüyüm ama burası bana ait.</p>
+        Bu alan benim sığınağım — korkularımla dans ettiğim yer. <br>
+        <strong>🕷️ Happy Halloween! 🕸️</strong>
+    </p>
     </header>
 
     <!-- Image Counter Section -->
@@ -1472,9 +1491,9 @@
                 category: 'concept'
             },
             '4c156ed72c0153eb31d6e39538f9d33c.jpg': {
-                title: 'Şehvet ve Kontrol',
+                title: 'Artistic Journey',
                 description: 'Karakterin kim olduğunu bilmiyorum ama açıkça pokemon evrenine ait oldugu görülüyor. Arka plan resme buyülü bir hava katarken karakterin kıyafeti renk zıtlıkları ile dikkat çekiyor, gözleri dogrudan bize bakıyor bize yaklaşmak istediği ortada. Karakterin kişiliği muhtemelen dominant ve karşındaki kişiyi etkilemesi kaçınılmaz görünüyor.',
-                category: 'şanslı-abra'
+                category: 'anime-art'
             },
             '4e4841a463e43139b24abcbf355180c7.jpg': {
                 title: 'Digital Harmony',
@@ -1892,6 +1911,271 @@
                 description: 'Social media inspired artwork',
                 category: 'digital-art'
             },
+            '04a685978d2a94321f049ca4682a4fd3.jpg': {
+                title: 'Halloween Spirit',
+                description: 'Dark and mysterious Halloween artwork',
+                category: 'art'
+            },
+            '04f545bbb9316041d476c63c1cd864a6.jpg': {
+                title: 'Spooky Vision',
+                description: 'Haunting visual composition',
+                category: 'art'
+            },
+            '197d9c6990d4e63557095ea571f2d0e2.jpg': {
+                title: 'Dark Fantasy',
+                description: 'Gothic fantasy artwork',
+                category: 'art'
+            },
+            '20b941c237be1aed6efbe5e9facda4cc.jpg': {
+                title: 'Mysterious Night',
+                description: 'Enigmatic nocturnal scene',
+                category: 'photography'
+            },
+            '251d12b29e5134acbfc6adcde3274318.jpg': {
+                title: 'Shadow Play',
+                description: 'Artistic shadow composition',
+                category: 'art'
+            },
+            '26f4cb3819e3855df4eb9c32384a0df9.jpg': {
+                title: 'Autumn Darkness',
+                description: 'Dark autumn atmosphere',
+                category: 'photography'
+            },
+            '287d97f62ce32751599f8a996414fe88.jpg': {
+                title: 'Gothic Beauty',
+                description: 'Beautiful gothic artwork',
+                category: 'art'
+            },
+            '29a37c1c2a75177838e2cf58d52ffd5f.jpg': {
+                title: 'Haunted Dreams',
+                description: 'Dreamlike haunting imagery',
+                category: 'concept'
+            },
+            '2c39627d7e8070fc4b66be34f90ecc4b.jpg': {
+                title: 'Dark Elegance',
+                description: 'Elegant dark composition',
+                category: 'art'
+            },
+            '2f4e214c6a36294bc6c2376f634106a6.jpg': {
+                title: 'Midnight Mystery',
+                description: 'Mysterious midnight scene',
+                category: 'photography'
+            },
+            '2f63e8ff62e7bc3737db91d8d4c5f3c0.jpg': {
+                title: 'Spooky Atmosphere',
+                description: 'Atmospheric spooky artwork',
+                category: 'art'
+            },
+            '3015f8a5f74a0ee58e85d16a28e35d5c.jpg': {
+                title: 'Dark Fantasy World',
+                description: 'Fantasy world in darkness',
+                category: 'concept'
+            },
+            '30fabe3e0b82ed62ebfc7ab985925076.jpg': {
+                title: 'Gothic Vision',
+                description: 'Gothic artistic vision',
+                category: 'art'
+            },
+            '32047246a7f276e90f4978a00cd801ef.jpg': {
+                title: 'Haunting Beauty',
+                description: 'Beautiful haunting imagery',
+                category: 'photography'
+            },
+            '32c4297090b2eff2633825f68952f5eb.jpg': {
+                title: 'Dark Mystique',
+                description: 'Mystical dark artwork',
+                category: 'art'
+            },
+            '3781ddf3e203589dcd7e22fbdfb74da8.jpg': {
+                title: 'Shadow Realm',
+                description: 'Realm of shadows',
+                category: 'concept'
+            },
+            '39699b66854185c537e3f9844e3f3c2b.jpg': {
+                title: 'Eerie Elegance',
+                description: 'Elegant eerie composition',
+                category: 'art'
+            },
+            '3d0eea873fa5a40112dd18e8e681b602.jpg': {
+                title: 'Nocturnal Beauty',
+                description: 'Beautiful night scene',
+                category: 'photography'
+            },
+            '3e0f8a3fa556f136df3bbfaebe6d83e0.jpg': {
+                title: 'Dark Enchantment',
+                description: 'Enchanting dark artwork',
+                category: 'art'
+            },
+            '3ebd6ce8a0a264cb44e44622b83a0e13.jpg': {
+                title: 'Gothic Dreams',
+                description: 'Dreamlike gothic imagery',
+                category: 'concept'
+            },
+            '48b0e792d004ec26f135398c7b25b42a.jpg': {
+                title: 'Mysterious Shadows',
+                description: 'Shadowy mysterious scene',
+                category: 'photography'
+            },
+            '493dac06ff532303cd85b544ae4b29dc.jpg': {
+                title: 'Dark Artistry',
+                description: 'Artistic dark composition',
+                category: 'art'
+            },
+            '5af47ea963eddb8a892149eeedd44273.jpg': {
+                title: 'Haunted Elegance',
+                description: 'Elegant haunted atmosphere',
+                category: 'art'
+            },
+            '5bdcda216a0e7a8fce0b6a1602dfa343.jpg': {
+                title: 'Spooky Charm',
+                description: 'Charming spooky artwork',
+                category: 'photography'
+            },
+            '5d0949ec57cd170a57ccdf0cec883adc.jpg': {
+                title: 'Dark Fantasy Realm',
+                description: 'Fantasy realm in darkness',
+                category: 'concept'
+            },
+            '66c0171a90a6ca7daadcce68b6a959e0.jpg': {
+                title: 'Gothic Mystery',
+                description: 'Mysterious gothic scene',
+                category: 'art'
+            },
+            '66e12ee3185e9daea7bf39ad8b8744f1.jpg': {
+                title: 'Eerie Beauty',
+                description: 'Beautiful eerie composition',
+                category: 'photography'
+            },
+            '717a8fdfadc827d335c5002e6f288775.jpg': {
+                title: 'Dark Enchantment',
+                description: 'Enchanting dark artwork',
+                category: 'art'
+            },
+            '7966f154273fa244421cf98cd0fb845e.jpg': {
+                title: 'Haunting Vision',
+                description: 'Visionary haunting imagery',
+                category: 'concept'
+            },
+            '7dce715fd7bbf002e21d268e35693c5c.jpg': {
+                title: 'Mysterious Elegance',
+                description: 'Elegant mysterious scene',
+                category: 'art'
+            },
+            '80769eeacf8ea2eaad5b1e2089d1f780.jpg': {
+                title: 'Gothic Atmosphere',
+                description: 'Atmospheric gothic artwork',
+                category: 'photography'
+            },
+            '82feb26478b0432cda84ac56e80f6008.jpg': {
+                title: 'Dark Beauty',
+                description: 'Beautiful dark composition',
+                category: 'art'
+            },
+            '872a61e73b46c546364659eb0362e704.jpg': {
+                title: 'Spooky Dreams',
+                description: 'Dreamlike spooky imagery',
+                category: 'concept'
+            },
+            '8901fb9222bad47277cd818eae3b7d7a.jpg': {
+                title: 'Haunted Mystery',
+                description: 'Mysterious haunted scene',
+                category: 'art'
+            },
+            '8bf2028f1597f25d0428b3ed684002c7.jpg': {
+                title: 'Dark Mystique',
+                description: 'Mystical dark artwork',
+                category: 'photography'
+            },
+            '941c70a94bcedc6d74787b7b524f05f5.jpg': {
+                title: 'Gothic Vision',
+                description: 'Visionary gothic composition',
+                category: 'art'
+            },
+            '98311af7a4fdc6a80824f9f02f63778d.jpg': {
+                title: 'Eerie Charm',
+                description: 'Charming eerie artwork',
+                category: 'concept'
+            },
+            '98f862893fa10e458213466c9b94bf6d.jpg': {
+                title: 'Mysterious Beauty',
+                description: 'Beautiful mysterious scene',
+                category: 'photography'
+            },
+            '9923a42a627a2c1ff0cd990948402ba5.jpg': {
+                title: 'Dark Elegance',
+                description: 'Elegant dark composition',
+                category: 'art'
+            },
+            '9b8f3f3c694ac9f16b22823c382b43c8.jpg': {
+                title: 'Haunting Atmosphere',
+                description: 'Atmospheric haunting imagery',
+                category: 'art'
+            },
+            'a4c596849c74527ec35714ecf00b0d55.jpg': {
+                title: 'Gothic Dreams',
+                description: 'Dreamlike gothic artwork',
+                category: 'concept'
+            },
+            'a555856c9a8ba10a2cbcd6dd6d9e184a.jpg': {
+                title: 'Spooky Elegance',
+                description: 'Elegant spooky scene',
+                category: 'photography'
+            },
+            'a66618afeb201bada2e7eab8a7209a1c.jpg': {
+                title: 'Dark Fantasy',
+                description: 'Fantasy dark composition',
+                category: 'art'
+            },
+            'b108b5273156dee3bd3705f7599339cd.jpg': {
+                title: 'Mysterious Night',
+                description: 'Nocturnal mysterious scene',
+                category: 'photography'
+            },
+            'b3d440f9ff37d267cae3bfe6ad65236d.jpg': {
+                title: 'Haunted Beauty',
+                description: 'Beautiful haunted artwork',
+                category: 'art'
+            },
+            'b6906971324a9d06299537e91b94348d.jpg': {
+                title: 'Gothic Mystique',
+                description: 'Mystical gothic imagery',
+                category: 'concept'
+            },
+            'b76b0f04e6c2a25a6ee55f84a413528b.jpg': {
+                title: 'Dark Charm',
+                description: 'Charming dark composition',
+                category: 'art'
+            },
+            'd0f1d29ce8d4ffd6ac387ca99d59e3d5.jpg': {
+                title: 'Eerie Vision',
+                description: 'Visionary eerie artwork',
+                category: 'photography'
+            },
+            'd50afeef8af1343f2c7a8da0747ec3bd.jpg': {
+                title: 'Spooky Mystery',
+                description: 'Mysterious spooky scene',
+                category: 'art'
+            },
+            'e357a65d4c8d576f6969452523692643.jpg': {
+                title: 'Haunting Elegance',
+                description: 'Elegant haunting composition',
+                category: 'concept'
+            },
+            'e7b1ca447d26ad49255d68edb258547a.jpg': {
+                title: 'Dark Dreams',
+                description: 'Dreamlike dark imagery',
+                category: 'art'
+            },
+            'e92a26f2cfd4de3fddec543f2cb18f1b.jpg': {
+                title: 'Gothic Beauty',
+                description: 'Beautiful gothic artwork',
+                category: 'photography'
+            },
+            'ebe759bfa5403bf871c57f8e350f63a8.jpg': {
+                title: 'Mysterious Atmosphere',
+                description: 'Atmospheric mysterious scene',
+                category: 'art'
+            },
         };
 
         // All images from img folder (complete list)
@@ -2111,6 +2395,59 @@
             'shaun-tan-rules-of-summer-rabbit-painting.jpg',
             'untitled-25.jpg!PinterestSmall.jpg',
             'zimayyuvgsof578ry92nf24g.jpg',
+            '04a685978d2a94321f049ca4682a4fd3.jpg',
+            '04f545bbb9316041d476c63c1cd864a6.jpg',
+            '197d9c6990d4e63557095ea571f2d0e2.jpg',
+            '20b941c237be1aed6efbe5e9facda4cc.jpg',
+            '251d12b29e5134acbfc6adcde3274318.jpg',
+            '26f4cb3819e3855df4eb9c32384a0df9.jpg',
+            '287d97f62ce32751599f8a996414fe88.jpg',
+            '29a37c1c2a75177838e2cf58d52ffd5f.jpg',
+            '2c39627d7e8070fc4b66be34f90ecc4b.jpg',
+            '2f4e214c6a36294bc6c2376f634106a6.jpg',
+            '2f63e8ff62e7bc3737db91d8d4c5f3c0.jpg',
+            '3015f8a5f74a0ee58e85d16a28e35d5c.jpg',
+            '30fabe3e0b82ed62ebfc7ab985925076.jpg',
+            '32047246a7f276e90f4978a00cd801ef.jpg',
+            '32c4297090b2eff2633825f68952f5eb.jpg',
+            '3781ddf3e203589dcd7e22fbdfb74da8.jpg',
+            '39699b66854185c537e3f9844e3f3c2b.jpg',
+            '3d0eea873fa5a40112dd18e8e681b602.jpg',
+            '3e0f8a3fa556f136df3bbfaebe6d83e0.jpg',
+            '3ebd6ce8a0a264cb44e44622b83a0e13.jpg',
+            '48b0e792d004ec26f135398c7b25b42a.jpg',
+            '493dac06ff532303cd85b544ae4b29dc.jpg',
+            '5af47ea963eddb8a892149eeedd44273.jpg',
+            '5bdcda216a0e7a8fce0b6a1602dfa343.jpg',
+            '5d0949ec57cd170a57ccdf0cec883adc.jpg',
+            '66c0171a90a6ca7daadcce68b6a959e0.jpg',
+            '66e12ee3185e9daea7bf39ad8b8744f1.jpg',
+            '717a8fdfadc827d335c5002e6f288775.jpg',
+            '7966f154273fa244421cf98cd0fb845e.jpg',
+            '7dce715fd7bbf002e21d268e35693c5c.jpg',
+            '80769eeacf8ea2eaad5b1e2089d1f780.jpg',
+            '82feb26478b0432cda84ac56e80f6008.jpg',
+            '872a61e73b46c546364659eb0362e704.jpg',
+            '8901fb9222bad47277cd818eae3b7d7a.jpg',
+            '8bf2028f1597f25d0428b3ed684002c7.jpg',
+            '941c70a94bcedc6d74787b7b524f05f5.jpg',
+            '98311af7a4fdc6a80824f9f02f63778d.jpg',
+            '98f862893fa10e458213466c9b94bf6d.jpg',
+            '9923a42a627a2c1ff0cd990948402ba5.jpg',
+            '9b8f3f3c694ac9f16b22823c382b43c8.jpg',
+            'a4c596849c74527ec35714ecf00b0d55.jpg',
+            'a555856c9a8ba10a2cbcd6dd6d9e184a.jpg',
+            'a66618afeb201bada2e7eab8a7209a1c.jpg',
+            'b108b5273156dee3bd3705f7599339cd.jpg',
+            'b3d440f9ff37d267cae3bfe6ad65236d.jpg',
+            'b6906971324a9d06299537e91b94348d.jpg',
+            'b76b0f04e6c2a25a6ee55f84a413528b.jpg',
+            'd0f1d29ce8d4ffd6ac387ca99d59e3d5.jpg',
+            'd50afeef8af1343f2c7a8da0747ec3bd.jpg',
+            'e357a65d4c8d576f6969452523692643.jpg',
+            'e7b1ca447d26ad49255d68edb258547a.jpg',
+            'e92a26f2cfd4de3fddec543f2cb18f1b.jpg',
+            'ebe759bfa5403bf871c57f8e350f63a8.jpg',
         ];
         let currentFilter = 'all';
 
