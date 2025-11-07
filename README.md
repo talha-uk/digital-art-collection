@@ -205,7 +205,6 @@ Ancak lütfen orijinal projeye atıfta bulunun. 🙏
 - 🎨 Kullanıcıların resim yükleme sistemi 
 - 📱 Kullanıcı tabanlı Yorum ve Değerlendirme özelliği
 ---
-
 <div align="center">
   <img src="https://img.shields.io/badge/Made%20with-❤️-red.svg"/>
   <img src="https://img.shields.io/badge/Built%20with-HTML%20CSS%20JS-blue.svg"/>
