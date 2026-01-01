@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halloween Art Collection</title>
+    <title>Winter Art Collection</title>
     <style>
         * {
             margin: 0;
@@ -13,8 +13,8 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a14 25%, #2d1810 50%, #1a0a14 75%, #0a0a0a 100%);
-            color: #ff9933;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2a3a 25%, #0d1b2a 50%, #1a2a3a 75%, #0a1628 100%);
+            color: #b3e5fc;
             overflow-x: hidden;
             min-height: 100vh;
         }
@@ -38,10 +38,10 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 20%, #ff6600 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, #6a0dad 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, #8b0000 0%, transparent 50%),
-                radial-gradient(circle at 60% 40%, #ff9933 0%, transparent 50%);
+                radial-gradient(circle at 20% 20%, #4a90e2 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #87ceeb 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, #b0e0e6 0%, transparent 50%),
+                radial-gradient(circle at 60% 40%, #c0c0c0 0%, transparent 50%);
             animation: bg-pulse 8s ease-in-out infinite;
         }
 
@@ -70,7 +70,7 @@
 
         .header h1 {
             font-size: clamp(2.5rem, 6vw, 4rem);
-            background: linear-gradient(45deg, #ff6600, #9d4edd, #ff9933, #6a0dad, #ff6600);
+            background: linear-gradient(45deg, #4a90e2, #87ceeb, #b3e5fc, #c0c0c0, #4a90e2);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -78,7 +78,7 @@
             animation: gradient-shift 3s ease-in-out infinite;
             margin-bottom: 1rem;
             letter-spacing: 0.1em;
-            filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.5)) drop-shadow(0 0 30px rgba(157, 78, 221, 0.3));
+            filter: drop-shadow(0 0 20px rgba(74, 144, 226, 0.5)) drop-shadow(0 0 30px rgba(135, 206, 235, 0.3));
         }
 
         @keyframes gradient-shift {
@@ -95,7 +95,7 @@
 
         .header p {
             font-size: 1.2rem;
-            color: #cc8855;
+            color: #a8d8ea;
             letter-spacing: 0.05em;
             max-width: 1500px;
             margin: 0 auto;
@@ -118,8 +118,8 @@
         }
 
         .stat-item {
-            background: linear-gradient(135deg, rgba(45, 24, 16, 0.6), rgba(26, 10, 30, 0.6));
-            border: 2px solid #663300;
+            background: linear-gradient(135deg, rgba(26, 42, 58, 0.6), rgba(13, 27, 42, 0.6));
+            border: 2px solid #4a5f7a;
             border-radius: 10px;
             padding: 1.5rem 1rem;
             text-align: center;
@@ -128,8 +128,8 @@
         }
 
         .stat-item:hover {
-            border-color: #9d4edd;
-            box-shadow: 0 0 20px rgba(255, 102, 0, 0.4), 0 0 15px rgba(157, 78, 221, 0.3);
+            border-color: #87ceeb;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.4), 0 0 15px rgba(135, 206, 235, 0.3);
             transform: translateY(-2px);
         }
 
@@ -137,18 +137,18 @@
             display: block;
             font-size: 2rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff9933, #9d4edd);
+            background: linear-gradient(45deg, #b3e5fc, #87ceeb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.5));
+            filter: drop-shadow(0 0 10px rgba(74, 144, 226, 0.5));
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
             display: block;
             font-size: 0.9rem;
-            color: #cc8855;
+            color: #a8d8ea;
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
@@ -163,9 +163,9 @@
         }
 
         .filter-btn {
-            background: linear-gradient(135deg, rgba(45, 24, 16, 0.3), rgba(26, 10, 30, 0.3));
-            border: 2px solid #663300;
-            color: #ff9933;
+            background: linear-gradient(135deg, rgba(26, 42, 58, 0.3), rgba(13, 27, 42, 0.3));
+            border: 2px solid #4a5f7a;
+            color: #b3e5fc;
             padding: 0.8rem 1.5rem;
             cursor: pointer;
             font-family: 'Courier New', monospace;
@@ -183,16 +183,16 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, #ff6600, #9d4edd, transparent);
+            background: linear-gradient(90deg, transparent, #4a90e2, #87ceeb, transparent);
             transition: left 0.5s ease;
         }
 
         .filter-btn:hover,
         .filter-btn.active {
-            border-color: #9d4edd;
-            color: #ff6600;
-            text-shadow: 0 0 10px #ff6600, 0 0 15px rgba(157, 78, 221, 0.5);
-            box-shadow: 0 0 20px rgba(255, 102, 0, 0.4), 0 0 15px rgba(157, 78, 221, 0.3);
+            border-color: #87ceeb;
+            color: #4a90e2;
+            text-shadow: 0 0 10px #4a90e2, 0 0 15px rgba(135, 206, 235, 0.5);
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.4), 0 0 15px rgba(135, 206, 235, 0.3);
         }
 
         .filter-btn:hover::before {
@@ -222,10 +222,10 @@
         /* Image cards - Flexible height */
         .image-card {
             position: relative;
-            background: linear-gradient(135deg, rgba(45, 24, 16, 0.8), rgba(26, 10, 20, 0.8));
+            background: linear-gradient(135deg, rgba(26, 42, 58, 0.8), rgba(13, 27, 42, 0.8));
             border-radius: 15px;
             overflow: hidden;
-            border: 1px solid #663300;
+            border: 1px solid #4a5f7a;
             transition: all 0.3s ease;
             perspective: 1000px;
             margin-bottom: 20px;
@@ -241,7 +241,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 102, 0, 0.1), rgba(157, 78, 221, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(74, 144, 226, 0.1), rgba(135, 206, 235, 0.1), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
             z-index: 1;
@@ -249,11 +249,11 @@
 
         .image-card:hover {
             transform: translateY(-5px);
-            border-color: #ff6600;
+            border-color: #4a90e2;
             box-shadow:
                 0 15px 30px rgba(0, 0, 0, 0.5),
-                0 0 25px rgba(255, 102, 0, 0.3),
-                0 0 15px rgba(157, 78, 221, 0.2);
+                0 0 25px rgba(74, 144, 226, 0.3),
+                0 0 15px rgba(135, 206, 235, 0.2);
         }
 
         .image-card:hover::before {
@@ -264,7 +264,7 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            background: linear-gradient(135deg, rgba(45, 24, 16, 0.3), rgba(26, 10, 30, 0.3));
+            background: linear-gradient(135deg, rgba(26, 42, 58, 0.3), rgba(13, 27, 42, 0.3));
         }
 
         .image-card img {
@@ -304,17 +304,17 @@
         }
 
         .image-info h3 {
-            background: linear-gradient(45deg, #ff9933, #9d4edd);
+            background: linear-gradient(45deg, #b3e5fc, #87ceeb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
-            filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.5));
+            filter: drop-shadow(0 0 10px rgba(74, 144, 226, 0.5));
         }
 
         .image-info p {
-            color: #cc8855;
+            color: #a8d8ea;
             font-size: 0.9rem;
             line-height: 1.4;
         }
@@ -369,13 +369,13 @@
         /* Orta kısım - Resim bilgileri */
         .image-info-section {
             width: 350px;
-            background: linear-gradient(180deg, rgba(45, 24, 16, 0.95), rgba(26, 10, 30, 0.95));
+            background: linear-gradient(180deg, rgba(26, 42, 58, 0.95), rgba(13, 27, 42, 0.95));
             padding: 40px 30px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            border-left: 1px solid #663300;
-            border-right: 1px solid #663300;
+            border-left: 1px solid #4a5f7a;
+            border-right: 1px solid #4a5f7a;
             backdrop-filter: blur(10px);
             overflow-y: auto;
         }
@@ -408,7 +408,7 @@
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff9933, #9d4edd, #ff9933);
+            background: linear-gradient(90deg, #b3e5fc, #87ceeb, #b3e5fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -418,7 +418,7 @@
         .image-description {
             font-size: 14px;
             line-height: 1.6;
-            color: #cc8855;
+            color: #a8d8ea;
             margin-bottom: 30px;
             text-align: justify;
         }
@@ -429,7 +429,7 @@
 
         .tags-title {
             font-size: 12px;
-            color: #996633;
+            color: #6b8fa3;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
@@ -437,27 +437,27 @@
 
         .tag {
             display: inline-block;
-            background: linear-gradient(135deg, rgba(255, 102, 0, 0.2), rgba(157, 78, 221, 0.2));
-            color: #ff9933;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(135, 206, 235, 0.2));
+            color: #b3e5fc;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             margin: 2px 4px 2px 0;
-            border: 1px solid rgba(157, 78, 221, 0.4);
+            border: 1px solid rgba(135, 206, 235, 0.4);
             transition: all 0.3s ease;
         }
 
         .tag:hover {
-            background: linear-gradient(135deg, rgba(255, 102, 0, 0.3), rgba(157, 78, 221, 0.3));
-            border-color: #9d4edd;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.3), rgba(135, 206, 235, 0.3));
+            border-color: #87ceeb;
             transform: translateY(-1px);
-            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+            box-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
         }
 
         .image-stats {
             margin-top: auto;
             padding-top: 20px;
-            border-top: 1px solid #663300;
+            border-top: 1px solid #4a5f7a;
         }
 
         .image-stats .stat-item {
@@ -471,20 +471,54 @@
         }
 
         .stat-label {
-            color: #996633;
+            color: #6b8fa3;
         }
 
         .stat-value {
-            background: linear-gradient(45deg, #ff9933, #9d4edd);
+            background: linear-gradient(45deg, #b3e5fc, #87ceeb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
+        /* Download button */
+        .download-btn {
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(135, 206, 235, 0.2));
+            border: 2px solid #4a90e2;
+            color: #b3e5fc;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.3), rgba(135, 206, 235, 0.3));
+            border-color: #87ceeb;
+            color: #87ceeb;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
         /* Sağ taraf - Küçük resim galerisi */
         .thumbnail-section {
             width: 120px;
-            background: linear-gradient(180deg, rgba(30, 15, 10, 0.95), rgba(20, 10, 25, 0.95));
+            background: linear-gradient(180deg, rgba(20, 35, 50, 0.95), rgba(13, 27, 42, 0.95));
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -519,9 +553,9 @@
         }
 
         .thumbnail.active {
-            border-color: #9d4edd;
+            border-color: #87ceeb;
             opacity: 1;
-            box-shadow: 0 0 15px rgba(157, 78, 221, 0.6), 0 0 10px rgba(255, 102, 0, 0.3);
+            box-shadow: 0 0 15px rgba(135, 206, 235, 0.6), 0 0 10px rgba(74, 144, 226, 0.3);
         }
 
         /* Scroll bar styling */
@@ -647,9 +681,9 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 3px solid #663300;
-            border-top: 3px solid #ff6600;
-            border-right: 3px solid #9d4edd;
+            border: 3px solid #4a5f7a;
+            border-top: 3px solid #4a90e2;
+            border-right: 3px solid #87ceeb;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -734,15 +768,15 @@
 
     <!-- Header -->
     <header class="header">
-        <h1>Halloween Collection 🕯️</h1>
+        <h1>Winter Collection ❄️</h1>
          <p>
-            Bu koleksiyon, karanlığın içindeki güzelliği arayan parçaları barındırıyor. <br>
-            Her görsel bir <strong>maske</strong>, bir <strong>yansıma</strong>, ya da belki <strong>bir çığlık</strong>. <br>
-            Kimi <strong>arzu</strong> dolu, kimi <strong>soğuk</strong> ve <strong>sessiz</strong>. <br>
-            <strong>Gerçek</strong> ile <strong>hayal</strong> arasındaki bu ince çizgide, seni de kendi gölgelerinle tanıştıracak. <br>
+            Bu koleksiyon, kışın soğuk ama büyüleyici güzelliğini yansıtan parçaları barındırıyor. <br>
+            Her görsel bir <strong>kar tanesi</strong>, bir <strong>buz kristali</strong>, ya da belki <strong>sessiz bir gece</strong>. <br>
+            Kimi <strong>sakin</strong> ve <strong>dingin</strong>, kimi <strong>soğuk</strong> ve <strong>parlak</strong>. <br>
+            <strong>Doğa</strong> ile <strong>sanat</strong> arasındaki bu büyülü buluşmada, kışın huzurunu keşfet. <br>
             <br>
-        Bu alan benim sığınağım — korkularımla dans ettiğim yer. <br>
-        <strong>🕷️ Happy Halloween! 🕸️</strong>
+        Bu alan benim sığınağım — kışın sessizliğinde huzur bulduğum yer. <br>
+        <strong>❄️ Happy Winter! ⛄</strong>
     </p>
     </header>
 
@@ -824,10 +858,19 @@
                         <span id="imageIndex" class="stat-value">1 / 1</span>
                     </div>
                     <div class="stat-item">
+                        <span class="stat-label">Görüntülenme</span>
+                        <span id="imageViews" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
                         <span class="stat-label">Format</span>
                         <span class="stat-value">JPG</span>
                     </div>
                 </div>
+
+                <button class="download-btn" id="downloadBtn" onclick="downloadCurrentImage()">
+                    <span>⬇️</span>
+                    <span>İndir</span>
+                </button>
             </div>
 
             <!-- Sağ taraf - Küçük resim galerisi -->
@@ -2127,11 +2170,6 @@
                 description: 'Fantasy dark composition',
                 category: 'art'
             },
-            'b108b5273156dee3bd3705f7599339cd.jpg': {
-                title: 'Mysterious Night',
-                description: 'Nocturnal mysterious scene',
-                category: 'photography'
-            },
             'b3d440f9ff37d267cae3bfe6ad65236d.jpg': {
                 title: 'Haunted Beauty',
                 description: 'Beautiful haunted artwork',
@@ -2439,7 +2477,6 @@
             'a4c596849c74527ec35714ecf00b0d55.jpg',
             'a555856c9a8ba10a2cbcd6dd6d9e184a.jpg',
             'a66618afeb201bada2e7eab8a7209a1c.jpg',
-            'b108b5273156dee3bd3705f7599339cd.jpg',
             'b3d440f9ff37d267cae3bfe6ad65236d.jpg',
             'b6906971324a9d06299537e91b94348d.jpg',
             'b76b0f04e6c2a25a6ee55f84a413528b.jpg',
@@ -2449,6 +2486,54 @@
             'e7b1ca447d26ad49255d68edb258547a.jpg',
             'e92a26f2cfd4de3fddec543f2cb18f1b.jpg',
             'ebe759bfa5403bf871c57f8e350f63a8.jpg',
+            '06724a65f44d09f49754b45f7a430486.jpg',
+            '0c01dc891dd600cc47fcb082ab0c1dc9.jpg',
+            '1c2ad2d324b97d3db295843a9faa675e.jpg',
+            '1f08c791e652e88893ad5f4ad4166b46.jpg',
+            '2160293745b0fdbc60d149893a350f5d.jpg',
+            '21a89739a727bb0e633bfd300c4846db.jpg',
+            '28e30245d82d55116aa49c23bc8aed3a.jpg',
+            '31a79d651cc2f6265cc83c1e961f7382.jpg',
+            '34d0b89a62aecc4cb5afeced3e810c57.jpg',
+            '3ac2fb4b957b419d53b85a4675e8770a.jpg',
+            '3b2fd09b1c4bd3c8fa42bbaa3703c87f.jpg',
+            '4b0743ff52cfc0504606a9fc67a1cb20.jpg',
+            '5df97d272e2e63b40ed49934dbb6f1b9.jpg',
+            '61ed99cb9d953a9b75e5b992effd23f3.jpg',
+            '64914c4a525dc0966f5a6d2457c8ca41.jpg',
+            '65f4dbb6010c5d476aaaf2e353f87821.jpg',
+            '69d1813a5febcddaa0efa7fe4b9b4f09.jpg',
+            '70099e66599aedb1e234ee55973b6435.jpg',
+            '75a474ae1cb3b3cc097d4952519a5377.jpg',
+            '7d6ebc06737d40790b60ba72ea799952.jpg',
+            '7ec9216fddbe7ac63dc18d06f976f2ab.jpg',
+            '82c3525ebfa9e83880b062001cd08552.jpg',
+            '8389ab6aea1dd6f4d3b5e43f58a073a5.jpg',
+            '84e8f5822421e1102ccc247ba0c646bd.jpg',
+            '876b2e6e3a8547b83df8692ad0f555d5.jpg',
+            '891f95371cc1969c844dc69dc9c093fb.jpg',
+            '8aed2a3f6f92fefabec09c5a3a0e39c1.jpg',
+            '8b43cd0ce74f23486309696d626d7802.jpg',
+            '8ba0cc042f0c583090f495de438397dc.jpg',
+            '8cb55a9a429b990cebbdd7c6aaf9e0f8.jpg',
+            '92811cfdeaad046c419181e88eb6f70a.jpg',
+            '9d6cb2ff813dffe31d654767b5389b35.jpg',
+            '9ef9637112237579f423ee781549893a.jpg',
+            '9f8d4a4b8244ce712983c8e41b245e66.jpg',
+            'a37e3bbd5e91928de56c16203d3e6c7d.jpg',
+            'b9640e1350b77087e788b226decce2d6.jpg',
+            'bd415a4db9bf90fa113905624ecad7e9.jpg',
+            'bfc7250dc09ae91f451485e2f8b07e1c.jpg',
+            'c5730f12394d15d43781afc662b2af66.jpg',
+            'c588d17ddee05e6e765339536b26c645.jpg',
+            'c918da6a9a88c38b84a1fd1b877920d0.jpg',
+            'cd1218155fbc6bffd9d3e9f1a19f05f4.jpg',
+            'd14a3ed4d082da3d18f9feb9c857582d.jpg',
+            'd337c1327686a39b4362374ac15540c4.jpg',
+            'ddc0f6babd51c91e62a88ccfde81f989.jpg',
+            'e11afd5577edeb5abda8af0f00bc1402.jpg',
+            'e9134d503afceaa8b4094b9d40b6d0f7.jpg',
+            'fc23c8da71142e8b7f3fbfdce63b24e0.jpg',
         ];
         let currentFilter = 'all';
 
@@ -2611,6 +2696,29 @@
         // Image Detail Modal functionality
         let currentImageIndex = 0;
         let filteredImages = [];
+        let currentImageFilename = '';
+
+        // View statistics - localStorage functions
+        function getViewStats() {
+            const stats = localStorage.getItem('imageViewStats');
+            return stats ? JSON.parse(stats) : {};
+        }
+
+        function saveViewStats(stats) {
+            localStorage.setItem('imageViewStats', JSON.stringify(stats));
+        }
+
+        function incrementViewCount(filename) {
+            const stats = getViewStats();
+            stats[filename] = (stats[filename] || 0) + 1;
+            saveViewStats(stats);
+            return stats[filename];
+        }
+
+        function getViewCount(filename) {
+            const stats = getViewStats();
+            return stats[filename] || 0;
+        }
 
         // Get image info with fallback and tags
         function getImageInfoWithTags(filename) {
@@ -2697,6 +2805,7 @@
         // Display current image
         function displayCurrentImage() {
             const filename = filteredImages[currentImageIndex];
+            currentImageFilename = filename;
             const config = getImageInfoWithTags(filename);
             const loading = document.getElementById('detailLoading');
             const mainImage = document.getElementById('mainImage');
@@ -2708,6 +2817,10 @@
             // Update image
             mainImage.src = `img/${filename}`;
             mainImage.alt = config.title;
+
+            // Increment view count and update display
+            const viewCount = incrementViewCount(filename);
+            document.getElementById('imageViews').textContent = viewCount;
 
             // Update info
             document.getElementById('imageTitle').textContent = config.title;
@@ -2732,6 +2845,19 @@
                 loading.style.display = 'none';
                 mainImage.style.opacity = '1';
             };
+        }
+
+        // Download current image
+        function downloadCurrentImage() {
+            if (!currentImageFilename) return;
+
+            const imageUrl = `img/${currentImageFilename}`;
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = currentImageFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Update thumbnail selection
